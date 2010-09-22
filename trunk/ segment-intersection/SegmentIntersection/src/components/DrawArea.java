@@ -343,8 +343,8 @@ public class DrawArea extends JPanel implements MouseListener,
 			        int[] xSegment = ((Segment) currentShape).getXpoints();
 			        int[] ySegment = ((Segment) currentShape).getYpoints();
 
-			        System.out.printf("Segment start : "+xSegment[0]+" "+ySegment[0]+"\n");
-			        System.out.printf("Segment end : "+xSegment[1]+" "+ySegment[1]+"\n\n");
+			        System.out.printf("New Segment start : "+xSegment[0]+" "+ySegment[0]+"\n");
+			        System.out.printf("New Segment end : "+xSegment[1]+" "+ySegment[1]+"\n\n");
 			        
 			        currentShape.setSkin(new Skin(currentSkin));
 			        MainWindow.root.addNode(currentShape);

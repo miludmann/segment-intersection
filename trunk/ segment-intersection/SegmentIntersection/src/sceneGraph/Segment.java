@@ -15,31 +15,31 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class Segment extends Shape {
 	
-	private java.awt.Polygon polygon;
+	private java.awt.Polygon segment;
 
 
 	public Segment() {
-		polygon = new java.awt.Polygon();
+		segment = new java.awt.Polygon();
 	}
 	
 	public Segment(int[] xpoints, int[] ypoints, int npoints) {
-		polygon = new java.awt.Polygon(xpoints, ypoints, npoints);
+		segment = new java.awt.Polygon(xpoints, ypoints, npoints);
 	}
 	
 	public Segment(ArrayList<int[]> points) {
 		this();
-		setPolygon(points);
+		setSegment(points);
 	}
 	
-	public void setPolygon(int[] xpoints, int[] ypoints, int npoints) {
-		polygon.reset();
+	public void setSegment(int[] xpoints, int[] ypoints, int npoints) {
+		segment.reset();
 		for (int i = 0; i < npoints; i++)
 		{
-			polygon.addPoint(xpoints[i], ypoints[i]);
+			segment.addPoint(xpoints[i], ypoints[i]);
 		}
 	}
 	
-	public void setPolygon(ArrayList<int[]> points) {
+	public void setSegment(ArrayList<int[]> points) {
 		int npoints = points.size();
 		int[] xpoints = new int[npoints];
 		int[] ypoints = new int[npoints];
@@ -52,10 +52,19 @@ public class Segment extends Shape {
 				ypoints[i] = point[1];
 			}
 		}
-		setPolygon(xpoints, ypoints, npoints);
+		setSegment(xpoints, ypoints, npoints);
 	}
+	
+	public int[] getXpoints() {
+		return segment.xpoints;
+	}
+	
+	public int[] getYpoints() {
+		return segment.ypoints;
+	}
+
 		
 	public java.awt.Polygon getShape() {
-		return polygon;
+		return segment;
 	}
 }

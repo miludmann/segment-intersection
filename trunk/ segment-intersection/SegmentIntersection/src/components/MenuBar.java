@@ -78,23 +78,7 @@ public class MenuBar extends JMenuBar
 	 * Le sous-menu "Supprimer" du menu "Edition" de la barre
      */
     private JMenuItem opSupprimer = new JMenuItem("Supprimer");
-    
-    /**
-	 * Le sous-menu "Sélectionner tout" du menu "Edition" de la barre
-     */
-    private JMenuItem opSelectionnerTout = new JMenuItem("Sélectionner tout");
-    
-    /**
-	 * Le sous-menu "Grouper" du menu "Edition" de la barre
-     */
-    private JMenuItem opGrouper = new JMenuItem("Grouper");
-    
-    /**
-	 * Le sous-menu "Degrouper" du menu "Edition" de la barre
-     */
-    private JMenuItem opDegrouper = new JMenuItem("Dégrouper");
-    
-    
+
 	/**
 	 * Le menu "A propos" de la barre
 	 */	    private JMenu menuAide = new JMenu("Aide");
@@ -102,7 +86,7 @@ public class MenuBar extends JMenuBar
     /**
 	 * Le sous-menu "A propos" du menu "A propos" de la barre
      */
-    private JMenuItem opAPropos = new JMenuItem("A propos");
+    private JMenuItem opAPropos = new JMenuItem("About");
 	
     /**
 	 * Constructeur de la barre de menus de l'application
@@ -121,9 +105,6 @@ public class MenuBar extends JMenuBar
         opCopier.addActionListener(new ActionManager(ActionToPerform.COPIER, optionsArea));        
         opColler.addActionListener(new ActionManager(ActionToPerform.COLLER, optionsArea)); 
         opSupprimer.addActionListener(new ActionManager(ActionToPerform.SUPPRIMER, optionsArea));
-        opSelectionnerTout.addActionListener(new ActionManager(ActionToPerform.SELECTIONNER_TOUT, optionsArea));        
-        opGrouper.addActionListener(new ActionManager(ActionToPerform.GROUPER, optionsArea));        
-        opDegrouper.addActionListener(new ActionManager(ActionToPerform.DEGROUPER, optionsArea)); 
         
         opAPropos.addActionListener(new ActionManager(ActionToPerform.APROPOS, optionsArea));
 
@@ -136,10 +117,6 @@ public class MenuBar extends JMenuBar
         opCopier.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK));
         opColler.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK));
         opSupprimer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-        opSelectionnerTout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK));
-        opGrouper.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
-        opDegrouper.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_DOWN_MASK));
-
         
         /* Ajout des sous-menus aux menus */
         this.menuFichier.add(opNouveau);
@@ -154,10 +131,6 @@ public class MenuBar extends JMenuBar
         this.menuEdition.add(opColler);
         this.menuEdition.addSeparator();
         this.menuEdition.add(opSupprimer);
-        this.menuEdition.add(opSelectionnerTout);
-        this.menuEdition.addSeparator();
-        this.menuEdition.add(opGrouper);
-        this.menuEdition.add(opDegrouper);
         
         this.menuAide.add(opAPropos);
 

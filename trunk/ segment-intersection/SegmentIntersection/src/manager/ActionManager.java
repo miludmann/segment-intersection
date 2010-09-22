@@ -29,7 +29,6 @@ public class ActionManager implements ActionListener
 	public enum ActionToPerform 
 	{
 		NOUVELLE_PAGE, QUITTER, APROPOS, DEFAIRE, REFAIRE,
-		SELECTIONNER_TOUT, GROUPER, DEGROUPER, SELECTIONNER,
 		COUPER,	COPIER,	COLLER,	CONFIRMER_SUPPRESSION,SUPPRIMER,
 		DESSINER_POLYGONE,
 		REDESSINER_TOUT;
@@ -52,26 +51,11 @@ public class ActionManager implements ActionListener
 				System.exit(0);
 				return;
 			case APROPOS:
-                //JOptionPane jop = new JOptionPane();
-                //ImageIcon img = new ImageIcon("images/Vert.png");
-                String mess = "Editeur de formes géométriques v1.0 \n" +
-                        "Créez et éditez des formes géométriques à votre guise !\n\n" +
-                        "Auteurs : Guillaume Depoyant & Michaël Ludmann\n" +
-                        "Projet ILO - ENSIIE 2010";
-                JOptionPane.showMessageDialog(null, mess, "A propos de cet éditeur", JOptionPane.INFORMATION_MESSAGE);
-				return;
-			case SELECTIONNER_TOUT:
-				ga.getZone().setTypeDessin(TypeAction.SELECTION);	
-				ga.getZone().selectionnerTout();	
-				return;
-			case GROUPER:
-				ga.getZone().grouper();	
-				return;
-			case DEGROUPER:
-				ga.getZone().degrouper();	
-				return;
-			case SELECTIONNER:
-				ga.getZone().setTypeDessin(TypeAction.SELECTION);	
+                String mess = "Line segment intersection editor v1.0 \n" +
+                        "Create segments and have fun visualing their intersections\n\n" +
+                        "Authors : Guillaume Depoyant & Michaël Ludmann\n" +
+                        "Computational Geometry Project - Fall 2010 - Aarhus University";
+                JOptionPane.showMessageDialog(null, mess, "About this editor", JOptionPane.INFORMATION_MESSAGE);
 				return;
 			case DEFAIRE:
 				ga.getZone().defaire();	
@@ -100,7 +84,7 @@ public class ActionManager implements ActionListener
             	}
 				return;	
 			case REDESSINER_TOUT:
-				ga.getZone().getZoneDessin().redessinerTout();
+				ga.getZone().getZoneDessin().redrawAll();
 					
 			} throw new AssertionError("ActionToPerform::unknown assertion : " + this);
 		}
@@ -132,14 +116,6 @@ public class ActionManager implements ActionListener
 				return new String("Supprimer");
 			case CONFIRMER_SUPPRESSION:
 				return new String("Confirmer Suppression");
-			case SELECTIONNER_TOUT:
-				return new String("Selectionner Tout");
-			case GROUPER:
-				return new String("Grouper");
-			case DEGROUPER:
-				return new String("Degrouper");
-			case SELECTIONNER:
-				return new String("Sélectionner");
 			case DESSINER_POLYGONE:
 				return new String("Dessiner polygone");
 			case REDESSINER_TOUT:

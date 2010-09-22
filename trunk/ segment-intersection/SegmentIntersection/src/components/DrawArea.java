@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -96,11 +95,11 @@ public class DrawArea extends JPanel implements MouseListener,
 	}
 
 
-	private Shape formeCourante = null;
+	private Shape currentShape = null;
 	private CaracForme caracFormeCourante;
 	
 	
-	private Skin apparenceCourante = new Skin();
+	private Skin currentSkin = new Skin();
 
 	// on a besoin de connaître la barreEtat si l'on veut pouvoir
 	// écrire des trucs dedans
@@ -119,13 +118,8 @@ public class DrawArea extends JPanel implements MouseListener,
 	private TypeAction typeDessin = TypeAction.DESSIN;
 	private Cursor curseurDessin = new Cursor(Cursor.CROSSHAIR_CURSOR);
 	private Cursor curseurSelection = new Cursor(Cursor.DEFAULT_CURSOR);
-	private Cursor curseurRedimNW = new Cursor(Cursor.NW_RESIZE_CURSOR);
-	private Cursor curseurRedimNE = new Cursor(Cursor.NE_RESIZE_CURSOR);
-	private Cursor curseurEchelleN = new Cursor(Cursor.N_RESIZE_CURSOR);
-	private Cursor curseurEchelleW = new Cursor(Cursor.W_RESIZE_CURSOR);
-	private Cursor curseurMain = new Cursor(Cursor.HAND_CURSOR);
-	private Cursor curseurDeplacement = new Cursor(Cursor.MOVE_CURSOR);
-	private boolean sourisDeplacee;	
+
+	private boolean mouseMoved;	
 	private JPopupMenu popupMenu;	
 	
 	/**
@@ -187,18 +181,18 @@ public class DrawArea extends JPanel implements MouseListener,
 		// on commence par effacer le fond
 		g2d.clearRect(0, 0, d.width, d.height);
 		
-		MainWindow.racine.draw(g2d);
+		MainWindow.root.draw(g2d);
 		
-		if (formeCourante != null)
+		if (currentShape != null)
 		{
-			formeCourante.draw(g2d);
+			currentShape.draw(g2d);
 		}
 		
 		int taillePoints = points.size();
 		if (taillePoints > 1)
 		{
-			g2d.setStroke(new BasicStroke(apparenceCourante.getLineThickness()));
-			g2d.setColor(apparenceCourante.getLineColor());
+			g2d.setStroke(new BasicStroke(currentSkin.getLineThickness()));
+			g2d.setColor(currentSkin.getLineColor());
 			for (int i = 0; i < taillePoints - 1; i++)
 			{
 				g2d.drawLine(points.get(i)[0], points.get(i)[1], points.get(i+1)[0], points.get(i+1)[1]);
@@ -287,15 +281,11 @@ public class DrawArea extends JPanel implements MouseListener,
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
-		//initieDroite(e.getX(), e.getY());
-		/*
-		if (shapeType.equals("Ellipse")) {
-            shape = new Shape(new Ellipse(Math.abs(e.getX() - FenetrePrincipale.origine[0]), Math.abs(e.getY() - FenetrePrincipale.origine[1])));
-		*/
+
 		int x = e.getX(), y = e.getY();
 		int[] point = {x, y};
 		
-		sourisDeplacee = false;
+		mouseMoved = false;
 
 		numButton = e.getButton();
 		if (numButton == MouseEvent.BUTTON1)
@@ -308,7 +298,7 @@ public class DrawArea extends JPanel implements MouseListener,
 			}				
 	    	else if (typeDessin == TypeAction.SELECTION || e.isControlDown())
 	    	{
-	            SceneGraphTree s = MainWindow.racine.getNodeAt(x, y);
+	            SceneGraphTree s = MainWindow.root.getNodeAt(x, y);
 	            
                 if (!e.isControlDown())
                     selection.clear();
@@ -328,7 +318,7 @@ public class DrawArea extends JPanel implements MouseListener,
 			repaint();
 		}
 		else
-			redessinerTout();
+			redrawAll();
 		
 		maybeShowPopup(e);
 	}
@@ -348,11 +338,17 @@ public class DrawArea extends JPanel implements MouseListener,
 			if (typeDessin == TypeAction.DESSIN)
 			{
 				
-				if (formeCourante != null)
+				if (currentShape != null)
 				{
-			        formeCourante.setSkin(new Skin(apparenceCourante));
-			        MainWindow.racine.addNode(formeCourante);
-			        redessinerTout();
+			        int[] xSegment = ((Segment) currentShape).getXpoints();
+			        int[] ySegment = ((Segment) currentShape).getYpoints();
+
+			        System.out.printf("Segment start : "+xSegment[0]+" "+ySegment[0]+"\n");
+			        System.out.printf("Segment end : "+xSegment[1]+" "+ySegment[1]+"\n\n");
+			        
+			        currentShape.setSkin(new Skin(currentSkin));
+			        MainWindow.root.addNode(currentShape);
+			        redrawAll();
 				}
 			}
 			
@@ -385,29 +381,20 @@ public class DrawArea extends JPanel implements MouseListener,
 		statusBar.afficherCoordonnees(x, y);
 
 
-		sourisDeplacee = true;
+		mouseMoved = true;
 		
 		if (numButton == MouseEvent.BUTTON1)
 		{
 			int[] point = {x, y};
 			int taillePoints = points.size();
 			
-			switch (typeDessin)
+			if (points.size() >= 2)
 			{
-			case DESSIN:				
-				switch (caracFormeCourante) {
-				
-				case POLYGONE:
-					points.set(taillePoints - 1, point);
-					break;
-				
-		
-				default:
-					break;
-				}
-				break;
-
+				points.remove(1);
 			}
+			points.add(point);
+			//points.set(taillePoints - 1, point);
+			((Segment)currentShape).setSegment(points);
 			
 			repaint();
 		}
@@ -444,32 +431,25 @@ public class DrawArea extends JPanel implements MouseListener,
 		
 		int[] point = {x, y};
 		
-		formeCourante = null;
-		
-		switch (caracFormeCourante) {
-		
-		case POLYGONE:
-			if (e != null)
-			{
-		    	points.add(point);
-	            if (points.size() == 2)
-	                formeCourante = new Segment(points);
-	            else if (points.size() < 1)
-	            	points.add(point);
-			}
-			else
-                formeCourante = new Segment(polygoneDefaut);
-			break;
-	
-
-		default:
-			break;
+		currentShape = null;
+/*
+		if (e != null)
+		{
+	    	points.add(point);
+            if (points.size() == 2)
+                formeCourante = new Segment(points);
+            else if (points.size() < 1)
+            	points.add(point);
 		}
+		else
+		*/
+		points.add(point);
+        currentShape = new Segment(points);
+
+		if (currentShape != null)
+	        currentShape.setSkin(new Skin(currentSkin));
 		
-		if (formeCourante != null)
-	        formeCourante.setSkin(new Skin(apparenceCourante));
-		
-		return formeCourante;
+		return currentShape;
     }
 	
 	/**
@@ -491,77 +471,7 @@ public class DrawArea extends JPanel implements MouseListener,
 			{
 				transformeNoeud = s;
 				
-				Rectangle2D rect = s.getBounds2D();
-				double x0 = rect.getMinX() - 3;
-				double x1 = rect.getMaxX() - 3;
-				double y0 = rect.getMinY() - 3;
-				double y1 = rect.getMaxY() - 3;
-				double w = rect.getMinX() + rect.getWidth()/2 - 3;
-				double h = rect.getMinY() + rect.getHeight()/2 - 3;
-				double larg = rect.getMinX() + rect.getWidth()/2 - 8;
-				double haut = rect.getMinY() + rect.getHeight()/2 - 8;
-				Rectangle2D rect1 = new Rectangle2D.Double(x0, y0, 6, 6);
-				Rectangle2D rect2 = new Rectangle2D.Double(x0, y1, 6, 6);
-				Rectangle2D rect3 = new Rectangle2D.Double(x1, y0, 6, 6);
-				Rectangle2D rect4 = new Rectangle2D.Double(x1, y1, 6, 6);
-				Rectangle2D rect5 = new Rectangle2D.Double(x0, h, 6, 6);
-				Rectangle2D rect6 = new Rectangle2D.Double(x1, h, 6, 6);
-				Rectangle2D rect7 = new Rectangle2D.Double(w, y0, 6, 6);
-				Rectangle2D rect8 = new Rectangle2D.Double(w, y1, 6, 6);
-				Ellipse2D ellipseCentre = new Ellipse2D.Double(larg, haut, 6, 6);
-				
-				if (rect1.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_HG);
-					break;
-				}
-				else if (rect2.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_BG);
-					break;
-				}
-				else if (rect3.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_HD);
-					break;
-				}
-				else if (rect4.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_BD);
-					break;
-				}
-				else if (rect5.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_MG);
-					break;
-				}
-				else if (rect6.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_MD);
-					break;
-				}
-				else if (rect7.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_HM);
-					break;
-				}
-				else if (rect8.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_BM);
-					break;
-				}
-				else if (ellipseCentre.contains(x, y))
-				{
-					setTypeDessin(TypeAction.REDIM_C);
-					break;
-				}
-				else if (rect.contains(x, y))
-				{
-					setTypeDessin(TypeAction.TRANSLATION);
-					break;
-				}
-				else
-					setTypeDessin(TypeAction.SELECTION);
+				setTypeDessin(TypeAction.SELECTION);
 			}
 		}
 		else if (typeDessin != TypeAction.DESSIN)
@@ -625,43 +535,6 @@ public class DrawArea extends JPanel implements MouseListener,
            else
            	statusBar.afficherMessage("Cliquez sur une figure pour la sélectionner. Maintenez la touche Ctrl enfoncée pour sélectionner plusieurs figures.");
            break;
-        case REDIM_C:
-        case ROTATION:
-         	setCursor(curseurMain);
-        	statusBar.afficherMessage("Cliquez puis faîtes glisser le pointeur pour redimensionner. Maintenez précédemment la touche Maj enfoncée pour faire tourner.");
-	        break;
-        case TRANSLATION:
-            setCursor(curseurDeplacement);
-        	statusBar.afficherMessage("Cliquez puis faîtes glisser le pointeur pour déplacer.");
-            break;
-        case REDIM_HG:
-        case REDIM_BD:
-        case CIS_HG:
-        case CIS_BD:
-            setCursor(curseurRedimNW);
-        	statusBar.afficherMessage("Cliquez puis faîtes glisser le pointeur pour redimensionner. Maintenez précédemment la touche Maj enfoncée pour cisailler.");
-            break;
-        case REDIM_BG:
-        case REDIM_HD:
-        case CIS_BG:
-        case CIS_HD:
-            setCursor(curseurRedimNE);
-        	statusBar.afficherMessage("Cliquez puis faîtes glisser le pointeur pour redimensionner. Maintenez précédemment la touche Maj enfoncée pour cisailler.");
-            break;
-        case REDIM_MG:
-        case REDIM_MD:
-        case CIS_MG:
-        case CIS_MD:
-            setCursor(curseurEchelleN);
-        	statusBar.afficherMessage("Cliquez puis faîtes glisser le pointeur pour redimensionner. Maintenez précédemment la touche Maj enfoncée pour cisailler.");
-           break;
-        case REDIM_HM:
-        case REDIM_BM:
-        case CIS_HM:
-        case CIS_BM:
-            setCursor(curseurEchelleW);
-        	statusBar.afficherMessage("Cliquez puis faîtes glisser le pointeur pour redimensionner. Maintenez précédemment la touche Maj enfoncée pour cisailler.");
-           break;
         }
         
         repaint();
@@ -684,7 +557,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	 * @return l'apprence courante
 	 */
 	public Skin getApparenceCourante() {
-		return apparenceCourante;
+		return currentSkin;
 	}
 	
 	/**
@@ -692,17 +565,17 @@ public class DrawArea extends JPanel implements MouseListener,
 	 * @param apparence l'apparence à appliquer
 	 */
 	public void setApparenceCourante(Skin apparence) {
-		this.apparenceCourante = apparence;
+		this.currentSkin = apparence;
 	}
 	
 	/**
 	 * Méthode permettant de tout redessiner, à savoir le graphe de scène
 	 * et la zone de dessin
 	 */
-	public void redessinerTout() {
-		formeCourante = null;
+	public void redrawAll() {
+		currentShape = null;
         points.clear();
-        sceneGraphArea.refraichir();
+        sceneGraphArea.reload();
         repaint();
 	}
 	
@@ -710,9 +583,9 @@ public class DrawArea extends JPanel implements MouseListener,
 	 * Permet de tout supprimer à l'écran (zone de dessin + graphe de scène)
 	 */
 	public void supprimerTout() {
-		MainWindow.racine.removeAll();
+		MainWindow.root.removeAll();
     	selection.clear();
-		redessinerTout();
+		redrawAll();
 	}
 
 	/**
@@ -726,7 +599,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	    	
 	    	selection.clear();
 	    	
-	    	redessinerTout();
+	    	redrawAll();
         }
     }
 
@@ -736,7 +609,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	public void defaire() {
 		SceneGraphTree.history.undo();
     	selection.clear();
-		redessinerTout();
+		redrawAll();
 	}
 
 	/**
@@ -745,7 +618,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	public void refaire() {
 		SceneGraphTree.history.redo();
     	selection.clear();
-		redessinerTout();
+		redrawAll();
 	}
 	
 	/**
@@ -761,7 +634,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	    	copier.addAll(selection);
 	    	selection.clear();
 	    	
-	    	redessinerTout();
+	    	redrawAll();
         }
     }
 
@@ -783,62 +656,12 @@ public class DrawArea extends JPanel implements MouseListener,
         if (!copier.isEmpty())
         {
 	    	for (SceneGraphTree node : copier)
-				MainWindow.racine.addAllNode((SceneGraphTree)node.clone());
+				MainWindow.root.addAllNode((SceneGraphTree)node.clone());
 	    	
-	    	redessinerTout();
+	    	redrawAll();
         }
     }
 
-    /**
-     * Groupe la sélection
-     */
-    public void grouper() {
-        if (!selection.isEmpty())
-        {
-        	Group group = new Group(selection);
-        	MainWindow.racine.addNode(group);
-            selection.clear();
-            selection.add(group);
-            redessinerTout();
-        }
-    }
-
-    /**
-     * Dégroupe le groupe sélectionné
-     */
-    public void degrouper() {
-        if (selection.size() == 1)
-        {
-        	SceneGraphTree node = selection.get(0);
-            if (node instanceof Group)
-            {
-            	Group group = (Group) node;
-            	
-            	selection.clear();
-        		for (Enumeration<?> e = group.children(); e.hasMoreElements(); )
-        		{
-        			selection.add((SceneGraphTree) e.nextElement());
-        		}
-        		
-        		group.ungroup();
-        		
-            	redessinerTout();
-            }
-        }
-    }
-
-    /**
-     * Sélectionne tous les noeuds fils de la racine
-     */
-    public void selectionnerTout() {
-    	selection.clear();
-		for (Enumeration<?> e = MainWindow.racine.children(); e.hasMoreElements(); )
-		{
-			selection.add((SceneGraphTree) e.nextElement());
-		}
-    	
-    	redessinerTout();
-    }
 
     /**
      * Sert à la gestion du clic droit dans la zone de dessin

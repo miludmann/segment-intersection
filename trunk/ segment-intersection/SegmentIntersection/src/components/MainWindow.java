@@ -40,7 +40,7 @@ public class MainWindow extends JFrame
     private StatusBar statusBar;
     private ToolBar toolBar;
     private SceneGraphArea sceneGraphArea;
-    private JSplitPane zoneSplittee;
+    private JSplitPane splitArea;
 
     /**
      * Origine du graphe 
@@ -50,7 +50,7 @@ public class MainWindow extends JFrame
 	 /**
 	  * Le graphe de scène 
 	  */
-    public static Root racine;
+    public static Root root;
     
     /**
      * <p>
@@ -82,7 +82,7 @@ public class MainWindow extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         /* */
-        racine = new Root();
+        root = new Root();
         origine = new int[2];
 
         /* Proprietes generales de la fenêtre */
@@ -102,11 +102,9 @@ public class MainWindow extends JFrame
         optionsArea = new OptionsArea(getZoneDessin());
         toolBar = new ToolBar(optionsArea);
         menuBar = new MenuBar(optionsArea);
-        
-        sceneGraphArea.ajouterMenus(optionsArea);
-        
+               
         /* Séparation de la fenêtre en une zone de dessin et une zone de graphe de scène */
-        zoneSplittee = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sceneGraphArea, getZoneDessin());
+        splitArea = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sceneGraphArea, getZoneDessin());
 
         
         /* Ajout de la barre de menu a la fenetre */
@@ -115,14 +113,14 @@ public class MainWindow extends JFrame
         this.getContentPane().setLayout(new BorderLayout());
         this.add(optionsArea, BorderLayout.EAST);
         this.add(toolBar, BorderLayout.NORTH);
-        this.add(zoneSplittee, BorderLayout.CENTER);
+        this.add(splitArea, BorderLayout.CENTER);
         this.add(statusBar, BorderLayout.SOUTH);
         
 
         /* Montrer la frame */
         this.setVisible(true);
         
-        zoneSplittee.setDividerLocation(0.175);
+        splitArea.setDividerLocation(0.175);
 
         this.addComponentListener(new ComponentAdapter() 
         {        	

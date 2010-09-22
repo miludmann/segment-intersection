@@ -10,14 +10,14 @@ import javax.swing.tree.TreePath;
  * Gestion des noeuds déplaçables
  * @author Depoyant Guillaume & Ludmann Michaël
  */
-class MovableNode implements Transferable
+class MutableNode implements Transferable
 {
 
 	public static DataFlavor TREE_PATH_FLAVOR = new DataFlavor(TreePath.class, "Tree Path");
 	DataFlavor flavors[] = { TREE_PATH_FLAVOR };
 	TreePath path;
 
-	public MovableNode(TreePath tp)
+	public MutableNode(TreePath tp)
 	{
 		path = tp;
 	}

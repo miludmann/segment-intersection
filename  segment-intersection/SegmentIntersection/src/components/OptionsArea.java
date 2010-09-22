@@ -193,27 +193,6 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	}
 
 	/**
-	 * Tout sélectionner (les fils la racine)
-	 */
-	public void selectionnerTout() {
-		drawArea.selectionnerTout();
-	}
-
-	/**
-	 * Grouper la sélection en cours
-	 */
-	public void grouper() {
-		drawArea.grouper();
-	}
-
-	/**
-	 * Dégrouper le groupe sélectionné
-	 */
-	public void degrouper() {
-		drawArea.degrouper();
-	}
-
-	/**
 	 * Définir le type de dessin
 	 * @param typeDessin
 	 */

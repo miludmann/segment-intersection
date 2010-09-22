@@ -34,7 +34,7 @@ public class DragNode implements DragSourceListener, DragGestureListener
 
 	DragSource source;
 	DragGestureRecognizer recognizer;
-	MovableNode transferable;
+	MutableNode transferable;
 	MutableTreeNode oldNode;
 	JTree sourceTree;
 
@@ -56,7 +56,7 @@ public class DragNode implements DragSourceListener, DragGestureListener
 			return;
 		}
 		oldNode = (MutableTreeNode) path.getLastPathComponent();
-		transferable = new MovableNode(path);
+		transferable = new MutableNode(path);
 		source.startDrag(dge, null, transferable, this);
 
 	}

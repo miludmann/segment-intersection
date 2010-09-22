@@ -39,10 +39,6 @@ public class ToolBar extends JToolBar
     private JButton couper = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/couper.png")));
     private JButton copier = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/copier.png")));
     private JButton coller = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/coller.png")));
-    private JButton selectionner = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/selectionner.png")));
-    private JButton selectionnerTout = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/selectionnerTout.png")));
-    private JButton grouper = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/grouper.png")));
-    private JButton degrouper = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/degrouper.png")));
     private JButton supprimer = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
     
 
@@ -59,10 +55,6 @@ public class ToolBar extends JToolBar
         couper.addActionListener(new ActionManager(ActionToPerform.COUPER, optionsArea));
         copier.addActionListener(new ActionManager(ActionToPerform.COPIER, optionsArea));
         coller.addActionListener(new ActionManager(ActionToPerform.COLLER, optionsArea));
-        selectionner.addActionListener(new ActionManager(ActionToPerform.SELECTIONNER, optionsArea));
-        selectionnerTout.addActionListener(new ActionManager(ActionToPerform.SELECTIONNER_TOUT, optionsArea));
-        grouper.addActionListener(new ActionManager(ActionToPerform.GROUPER, optionsArea));
-        degrouper.addActionListener(new ActionManager(ActionToPerform.DEGROUPER, optionsArea));
         supprimer.addActionListener(new ActionManager(ActionToPerform.SUPPRIMER, optionsArea));
         
         polygone.setToolTipText("Dessiner polygone");
@@ -72,10 +64,6 @@ public class ToolBar extends JToolBar
         couper.setToolTipText("Couper");
         copier.setToolTipText("Copier");
         coller.setToolTipText("Coller");
-        selectionner.setToolTipText("Sélectionner");
-        selectionnerTout.setToolTipText("Sélectionner tout");
-        grouper.setToolTipText("Grouper");
-        degrouper.setToolTipText("Dégrouper");
         supprimer.setToolTipText("Supprimer");
         
         this.setLayout(new GridLayout(1, 0));
@@ -94,13 +82,6 @@ public class ToolBar extends JToolBar
         this.add(copier);
         this.add(coller);
  
-        this.addSeparator();
-
-        this.add(selectionner);
-        this.add(selectionnerTout);
-        this.add(grouper);
-        this.add(degrouper);
-
         this.addSeparator();
 
         this.add(polygone);

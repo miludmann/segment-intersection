@@ -15,6 +15,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
@@ -129,8 +137,8 @@ public class OptionsArea extends JPanel implements ChangeListener {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-            	getZoneDessin().setTypeDessin(TypeAction.DESSIN);
-            	getZoneDessin().setCaracFormeCourante((CaracForme) listeFormes.getSelectedItem());
+            	getDrawArea().setTypeDessin(TypeAction.DESSIN);
+            	getDrawArea().setCaracFormeCourante((CaracForme) listeFormes.getSelectedItem());
         		stateChanged(null);
             }
         });
@@ -244,7 +252,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	}
 	
 	
-	public DrawArea getZoneDessin() {
+	public DrawArea getDrawArea() {
         return this.drawArea;
     }
 	
@@ -268,6 +276,65 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	public void stateChanged(ChangeEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void openFile(File file) {
+		
+		FileInputStream fis = null;
+	    BufferedInputStream bis = null;
+	    BufferedReader d = null;
+
+	    
+        System.out.printf("Opening: " + file.getName() + ".\n");
+        
+        try {
+            fis = new FileInputStream(file);
+
+            // Here BufferedInputStream is added for fast reading.
+            bis = new BufferedInputStream(fis);
+            d = new BufferedReader(new InputStreamReader(bis));
+
+            String line = null;
+            String[] lineSplit ;
+            Float x1, y1, x2, y2;
+            
+            while ((line = d.readLine()) != null) {
+
+            // this statement reads the line from the file and print it to
+              // the console.
+              System.out.println(line);
+              lineSplit = line.split(" ");
+              
+              // look for four floating numbers/line this way : x1 y1 x2 y2
+              if (lineSplit.length == 4)
+              {
+	              x1 = Float.parseFloat(lineSplit[0]);
+	              y1 = Float.parseFloat(lineSplit[1]);
+	              x2 = Float.parseFloat(lineSplit[2]);
+	              y2 = Float.parseFloat(lineSplit[3]);
+	              
+	              float[] pointSegmentStart = {x1, y1}; 
+	              float[] pointSegmentEnd = {x2, y2}; 
+	              
+	              getDrawArea().loadSegment(pointSegmentStart, pointSegmentEnd);
+	              
+	              System.out.println("x1 = "+x1+" y1 = "+y1+" x2 = "+x2+" y2 = "+y2);
+              } else {
+            	  System.out.println("openFile : Need four (4) floating numbers per line in the file, found "+lineSplit.length+" instead.");
+              }
+            }
+
+            // dispose all the resources after using them.
+            fis.close();
+            bis.close();
+            d.close();
+
+          } catch (FileNotFoundException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        
 	}
 }
 	

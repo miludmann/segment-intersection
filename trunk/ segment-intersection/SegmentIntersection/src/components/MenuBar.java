@@ -31,62 +31,53 @@ public class MenuBar extends JMenuBar
 	/**
 	 * Le menu "Fichier" de la barre
 	 */	
-	private JMenu menuFichier = new JMenu("Fichier");
+	private JMenu menuFile = new JMenu("File");
 	
 	/**
-	 * Le sous-menu "Nouveau" du menu "Fichier" de la barre
+	 * Le sous-menu "Nouveau" du menu "File" de la barre
 	 */
-    private JMenuItem opNouveau = new JMenuItem("Nouveau");
+    private JMenuItem opNew = new JMenuItem("New");
+    
+    /*
+     * Submenu "Open File" of menu "File" from the MenuBar
+     */
+    private JMenuItem opOpen = new JMenuItem("Open File");
     
     /**
-	 * Le sous-menu "Quitter" du menu "Fichier" de la barre
+	 * Le sous-menu "Quitter" du menu "File" de la barre
      */
-    private JMenuItem opQuitter = new JMenuItem("Quitter");
+    private JMenuItem opExit = new JMenuItem("Exit");
     
     
 	/**
 	 * Le menu "Edition" de la barre
 	 */	
-    private JMenu menuEdition = new JMenu("Edition");
+    private JMenu menuEdit = new JMenu("Edit");
     
     /**
 	 * Le sous-menu "Defaire" du menu "Edition" de la barre
      */
-    private JMenuItem opDefaire = new JMenuItem("Défaire");
+    private JMenuItem opUndo = new JMenuItem("Undo");
     
     /**
 	 * Le sous-menu "Refaire" du menu "Edition" de la barre
      */
-    private JMenuItem opRefaire = new JMenuItem("Refaire");
-    
-    /**
-	 * Le sous-menu "Couper" du menu "Edition" de la barre
-     */
-    private JMenuItem opCouper = new JMenuItem("Couper");
-    
-    /**
-	 * Le sous-menu "Copier" du menu "Edition" de la barre
-     */
-    private JMenuItem opCopier = new JMenuItem("Copier");
-    
-    /**
-	 * Le sous-menu "Coller" du menu "Edition" de la barre
-     */
-    private JMenuItem opColler = new JMenuItem("Coller");
+    private JMenuItem opRedo = new JMenuItem("Redo");
     
     /**
 	 * Le sous-menu "Supprimer" du menu "Edition" de la barre
      */
-    private JMenuItem opSupprimer = new JMenuItem("Supprimer");
+    private JMenuItem opDelete = new JMenuItem("Delete");
 
 	/**
 	 * Le menu "A propos" de la barre
-	 */	    private JMenu menuAide = new JMenu("Aide");
+	 */	    
+    private JMenu menuHelp = new JMenu("Help");
     
     /**
 	 * Le sous-menu "A propos" du menu "A propos" de la barre
      */
-    private JMenuItem opAPropos = new JMenuItem("About");
+    private JMenuItem opAbout = new JMenuItem("About");
 	
     /**
 	 * Constructeur de la barre de menus de l'application
@@ -96,48 +87,41 @@ public class MenuBar extends JMenuBar
 	public MenuBar(OptionsArea optionsArea) {
 		// TODO Auto-generated constructor stub
 		/* ActionListeners attribués aux sous-menus */
-        opNouveau.addActionListener(new ActionManager(ActionToPerform.NOUVELLE_PAGE, optionsArea));        
-        opQuitter.addActionListener(new ActionManager(ActionToPerform.QUITTER, optionsArea));
+        opNew.addActionListener(new ActionManager(ActionToPerform.NEW_SHEET, optionsArea));        
+        opOpen.addActionListener(new ActionManager(ActionToPerform.OPEN, optionsArea));
+        opExit.addActionListener(new ActionManager(ActionToPerform.EXIT, optionsArea));
         
-        opDefaire.addActionListener(new ActionManager(ActionToPerform.DEFAIRE, optionsArea));        
-        opRefaire.addActionListener(new ActionManager(ActionToPerform.REFAIRE, optionsArea));        
-        opCouper.addActionListener(new ActionManager(ActionToPerform.COUPER, optionsArea));        
-        opCopier.addActionListener(new ActionManager(ActionToPerform.COPIER, optionsArea));        
-        opColler.addActionListener(new ActionManager(ActionToPerform.COLLER, optionsArea)); 
-        opSupprimer.addActionListener(new ActionManager(ActionToPerform.SUPPRIMER, optionsArea));
+        opUndo.addActionListener(new ActionManager(ActionToPerform.UNDO, optionsArea));        
+        opRedo.addActionListener(new ActionManager(ActionToPerform.REDO, optionsArea));        
+        opDelete.addActionListener(new ActionManager(ActionToPerform.DELETE, optionsArea));
         
-        opAPropos.addActionListener(new ActionManager(ActionToPerform.APROPOS, optionsArea));
+        opAbout.addActionListener(new ActionManager(ActionToPerform.ABOUT, optionsArea));
 
         /* Quelques raccourcis claviers */
-        opNouveau.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
-        opQuitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK));
-        opDefaire.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
-        opRefaire.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
-        opCouper.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
-        opCopier.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK));
-        opColler.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK));
-        opSupprimer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+        opNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
+        opExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK));
+        opUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
+        opRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
+        opDelete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
         
         /* Ajout des sous-menus aux menus */
-        this.menuFichier.add(opNouveau);
-        this.menuFichier.addSeparator();
-        this.menuFichier.add(opQuitter);
+        this.menuFile.add(opNew);
+        this.menuFile.add(opOpen);
+        this.menuFile.addSeparator();
+        this.menuFile.add(opExit);
         
-        this.menuEdition.add(opDefaire);
-        this.menuEdition.add(opRefaire);
-        this.menuEdition.addSeparator();
-        this.menuEdition.add(opCouper);
-        this.menuEdition.add(opCopier);
-        this.menuEdition.add(opColler);
-        this.menuEdition.addSeparator();
-        this.menuEdition.add(opSupprimer);
+        this.menuEdit.add(opUndo);
+        this.menuEdit.add(opRedo);
+
+        this.menuEdit.addSeparator();
+        this.menuEdit.add(opDelete);
         
-        this.menuAide.add(opAPropos);
+        this.menuHelp.add(opAbout);
 
         /* Ajout des éléments du menu */
-        this.add(menuFichier);
-        this.add(menuEdition);
-        this.add(menuAide);
+        this.add(menuFile);
+        this.add(menuEdit);
+        this.add(menuHelp);
     
 	}
 

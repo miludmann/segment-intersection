@@ -16,36 +16,54 @@ import java.util.ArrayList;
 public class Segment extends Shape {
 	
 	private java.awt.Polygon segment;
-
+	private float[] xpoints;
+	private float[] ypoints;
 
 	public Segment() {
 		segment = new java.awt.Polygon();
+		xpoints = null;
+		ypoints = null;
 	}
 	
-	public Segment(int[] xpoints, int[] ypoints, int npoints) {
-		segment = new java.awt.Polygon(xpoints, ypoints, npoints);
+	public Segment(float[] xpoints, float[] ypoints, int npoints) {
+		setXpoints(xpoints);
+		setYpoints(ypoints);
+
+		// Here we need to register the vertices as integer for the drawing part
+		int[] xpointsInt = new int[npoints], ypointsInt = new int[npoints];
+		for(int i=0; i < npoints; i++)
+		{
+			xpointsInt[i] = Float.floatToIntBits(xpoints[i]);
+			ypointsInt[i] = Float.floatToIntBits(ypoints[i]);
+
+		}
+		segment = new java.awt.Polygon(xpointsInt, ypointsInt, npoints);
 	}
 	
-	public Segment(ArrayList<int[]> points) {
+	public Segment(ArrayList<float[]> points) {
 		this();
 		setSegment(points);
 	}
 	
-	public void setSegment(int[] xpoints, int[] ypoints, int npoints) {
+	public void setSegment(float[] xpoints, float[] ypoints, int npoints) {
 		segment.reset();
+		setXpoints(null);
+		setYpoints(null);
 		for (int i = 0; i < npoints; i++)
 		{
-			segment.addPoint(xpoints[i], ypoints[i]);
+			segment.addPoint((int) xpoints[i], (int) ypoints[i]);
 		}
+		setXpoints(xpoints);
+		setYpoints(ypoints);
 	}
 	
-	public void setSegment(ArrayList<int[]> points) {
+	public void setSegment(ArrayList<float[]> points) {
 		int npoints = points.size();
-		int[] xpoints = new int[npoints];
-		int[] ypoints = new int[npoints];
+		float[] xpoints = new float[npoints];
+		float[] ypoints = new float[npoints];
 		for (int i = 0; i < npoints; i++)
 		{
-			int[] point = points.get(i);
+			float[] point = points.get(i);
 			if (point.length == 2)
 			{
 				xpoints[i] = point[0];
@@ -55,16 +73,24 @@ public class Segment extends Shape {
 		setSegment(xpoints, ypoints, npoints);
 	}
 	
-	public int[] getXpoints() {
-		return segment.xpoints;
+	public float[] getXpoints() {
+		return this.xpoints;
 	}
 	
-	public int[] getYpoints() {
-		return segment.ypoints;
+	public float[] getYpoints() {
+		return this.ypoints;
 	}
 
 		
 	public java.awt.Polygon getShape() {
 		return segment;
+	}
+
+	public void setXpoints(float[] xpoints) {
+		this.xpoints = xpoints;
+	}
+
+	public void setYpoints(float[] ypoints) {
+		this.ypoints = ypoints;
 	}
 }

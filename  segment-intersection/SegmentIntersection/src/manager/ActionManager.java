@@ -2,13 +2,14 @@ package manager;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import components.MenuBar;
 import components.OptionsArea;
 import components.ToolBar;
-import components.DrawArea.TypeAction;
 import components.DrawArea.CaracForme;
 
 
@@ -28,63 +29,67 @@ public class ActionManager implements ActionListener
 	 */
 	public enum ActionToPerform 
 	{
-		NOUVELLE_PAGE, QUITTER, APROPOS, DEFAIRE, REFAIRE,
-		COUPER,	COPIER,	COLLER,	CONFIRMER_SUPPRESSION,SUPPRIMER,
-		DESSINER_POLYGONE,
-		REDESSINER_TOUT;
+		NEW_SHEET, EXIT, ABOUT, UNDO, REDO,
+		ACK_DEL,DELETE,
+		DRAW_SEGMENT,
+		REDRAW_ALL, OPEN;
 						
 		/**
 		 * Demande au Gestionnaire d'effectuer une action 
-		 * @param ga
+		 * @param am
 		 * @param e
 		 * @throws AssertionError
 		 */
-		public void performAction(ActionManager ga, ActionEvent e) throws AssertionError
+		public void performAction(ActionManager am, ActionEvent e) throws AssertionError
 		{
 
 			switch (this) 
 			{
-			case NOUVELLE_PAGE:
-				ga.getZone().supprimerTout();	
+			case NEW_SHEET:
+				am.getZone().supprimerTout();	
 				return;
-			case QUITTER:
+			case OPEN:
+				JFileChooser fc;
+			    fc = new JFileChooser();
+				int returnVal = fc.showOpenDialog(fc);
+			      if (returnVal == JFileChooser.APPROVE_OPTION) {
+			        File file = fc.getSelectedFile();
+			        //This is where a real application would open the file.
+			        am.getZone().openFile(file);
+			      } else {
+			    	System.out.printf("Open command cancelled by user.\n");
+			      }
+				return;
+			case EXIT:
 				System.exit(0);
 				return;
-			case APROPOS:
+			case ABOUT:
                 String mess = "Line segment intersection editor v1.0 \n" +
                         "Create segments and have fun visualing their intersections\n\n" +
                         "Authors : Guillaume Depoyant & Michaël Ludmann\n" +
                         "Computational Geometry Project - Fall 2010 - Aarhus University";
                 JOptionPane.showMessageDialog(null, mess, "About this editor", JOptionPane.INFORMATION_MESSAGE);
 				return;
-			case DEFAIRE:
-				ga.getZone().defaire();	
+			case UNDO:
+				am.getZone().defaire();	
 				return;
-			case REFAIRE:
-				ga.getZone().refaire();	
+			case REDO:
+				am.getZone().refaire();	
 				return;
-			case COUPER:
-				ga.getZone().couper();	
+
+			case DELETE:
+				am.getZone().supprimer();	
 				return;
-			case COPIER:
-				ga.getZone().copier();	
+			case DRAW_SEGMENT:
+				am.getZone().addShape(CaracForme.POLYGONE);	
 				return;
-			case COLLER:
-				ga.getZone().coller();	
-				return;
-			case SUPPRIMER:
-				ga.getZone().supprimer();	
-				return;
-			case DESSINER_POLYGONE:
-				ga.getZone().addShape(CaracForme.POLYGONE);	
-				return;
-			case CONFIRMER_SUPPRESSION:
+			case ACK_DEL:
 				if(JOptionPane.showConfirmDialog(null, "Ce noeud sera supprimé. Voulez-vous continuer ?", "Suppression", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION){
-					ga.getZone().supprimer();	
+					am.getZone().supprimer();	
             	}
 				return;	
-			case REDESSINER_TOUT:
-				ga.getZone().getZoneDessin().redrawAll();
+			case REDRAW_ALL:
+				am.getZone().getDrawArea().redrawAll();
 					
 			} throw new AssertionError("ActionToPerform::unknown assertion : " + this);
 		}
@@ -96,29 +101,23 @@ public class ActionManager implements ActionListener
 		{
 			switch (this)
 			{
-			case NOUVELLE_PAGE:
+			case NEW_SHEET:
 				return new String("Nouvelle Page");
-			case QUITTER:
+			case EXIT:
 				return new String("Quitter");
-			case APROPOS:
+			case ABOUT:
 				return new String("A propos");
-			case DEFAIRE:
+			case UNDO:
 				return new String("Defaire");
-			case REFAIRE:
+			case REDO:
 				return new String("Refaire");
-			case COUPER:
-				return new String("Couper");
-			case COPIER:
-				return new String("Copier");
-			case COLLER:
-				return new String("Coller");
-			case SUPPRIMER:
+			case DELETE:
 				return new String("Supprimer");
-			case CONFIRMER_SUPPRESSION:
+			case ACK_DEL:
 				return new String("Confirmer Suppression");
-			case DESSINER_POLYGONE:
+			case DRAW_SEGMENT:
 				return new String("Dessiner polygone");
-			case REDESSINER_TOUT:
+			case REDRAW_ALL:
 				return new String("Redessiner tout");
 
 			}

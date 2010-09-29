@@ -109,7 +109,7 @@ public class DrawArea extends JPanel implements MouseListener,
 
 	public static ArrayList<SceneGraphTree> selection = new ArrayList<SceneGraphTree>();
 	private ArrayList<SceneGraphTree> copier = new ArrayList<SceneGraphTree>();
-	private ArrayList<int[]> points = new ArrayList<int[]>();
+	private ArrayList<float[]> points = new ArrayList<float[]>();
 	private ArrayList<int[]> polygoneDefaut = new ArrayList<int[]>();
 	private ArrayList<int[]> triangleDefaut = new ArrayList<int[]>();
 	private SceneGraphTree transformeNoeud;
@@ -195,7 +195,7 @@ public class DrawArea extends JPanel implements MouseListener,
 			g2d.setColor(currentSkin.getLineColor());
 			for (int i = 0; i < taillePoints - 1; i++)
 			{
-				g2d.drawLine(points.get(i)[0], points.get(i)[1], points.get(i+1)[0], points.get(i+1)[1]);
+				g2d.drawLine(Float.floatToIntBits(points.get(i)[0]), Float.floatToIntBits(points.get(i)[1]), Float.floatToIntBits(points.get(i+1)[0]), Float.floatToIntBits(points.get(i+1)[1]));
 			}
 
 		}
@@ -340,8 +340,8 @@ public class DrawArea extends JPanel implements MouseListener,
 				
 				if (currentShape != null)
 				{
-			        int[] xSegment = ((Segment) currentShape).getXpoints();
-			        int[] ySegment = ((Segment) currentShape).getYpoints();
+			        float[] xSegment = ((Segment) currentShape).getXpoints();
+			        float[] ySegment = ((Segment) currentShape).getYpoints();
 
 			        System.out.printf("New Segment start : "+xSegment[0]+" "+ySegment[0]+"\n");
 			        System.out.printf("New Segment end : "+xSegment[1]+" "+ySegment[1]+"\n\n");
@@ -351,11 +351,20 @@ public class DrawArea extends JPanel implements MouseListener,
 			        redrawAll();
 				}
 			}
-			
-			
-		}
-		
+		}	
 		maybeShowPopup(e);
+	}
+	
+	public void loadSegment(float[] pointSegmentStart, float[] pointSegmentEnd)
+	{
+		System.out.println("DEBUG "+pointSegmentStart[0]+" "+pointSegmentEnd[0]+" "+pointSegmentStart[1]+" "+pointSegmentEnd[1]);
+		points.add(pointSegmentStart);
+		points.add(pointSegmentEnd);
+		System.out.println("NINI ");
+        currentShape = new Segment(points);
+		currentShape.setSkin(new Skin(currentSkin));
+        MainWindow.root.addNode(currentShape);
+        redrawAll();		
 	}
 
 	// ------------------------------------------------------------------------
@@ -374,8 +383,8 @@ public class DrawArea extends JPanel implements MouseListener,
 	@Override
 	public void mouseDragged(MouseEvent e)
 	{
-		int x = e.getX();
-		int y = e.getY();
+		float x = e.getX();
+		float y = e.getY();
 
 		// affichage des coordonnées
 		statusBar.afficherCoordonnees(x, y);
@@ -385,7 +394,7 @@ public class DrawArea extends JPanel implements MouseListener,
 		
 		if (numButton == MouseEvent.BUTTON1)
 		{
-			int[] point = {x, y};
+			float[] point = {x, y};
 			int taillePoints = points.size();
 			
 			if (points.size() >= 2)
@@ -401,7 +410,8 @@ public class DrawArea extends JPanel implements MouseListener,
 	}
 
     public Shape creerForme(MouseEvent e) {
-		int x, y, x0, y0, x1, y1, largeur, hauteur, angle, nbClics;
+		float x0, y0, x1, y1, largeur, hauteur, angle, nbClics;
+		float x, y;
 		if (e != null)
 		{
 			x = e.getX();
@@ -429,20 +439,10 @@ public class DrawArea extends JPanel implements MouseListener,
 			nbClics = 2;
 		}
 		
-		int[] point = {x, y};
+		float[] point = {x, y};
 		
 		currentShape = null;
-/*
-		if (e != null)
-		{
-	    	points.add(point);
-            if (points.size() == 2)
-                formeCourante = new Segment(points);
-            else if (points.size() < 1)
-            	points.add(point);
-		}
-		else
-		*/
+
 		points.add(point);
         currentShape = new Segment(points);
 
@@ -461,8 +461,8 @@ public class DrawArea extends JPanel implements MouseListener,
 	@Override
 	public void mouseMoved(MouseEvent e)
 	{
-		int x = e.getX();
-		int y = e.getY();
+		float x = e.getX();
+		float y = e.getY();
 		statusBar.afficherCoordonnees(x, y);
 		
 		if (!e.isControlDown() && !selection.isEmpty())

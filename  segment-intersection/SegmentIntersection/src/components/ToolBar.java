@@ -32,13 +32,11 @@ import javax.swing.JToolBar;
 public class ToolBar extends JToolBar
 {
 	
-	private JButton polygone = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/polygone.png")));
+	private JButton segment = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/segment.png")));
     private JButton nouvellePage = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/nouvellePage.png")));
+    private JButton openFile = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/open.png")));
     private JButton defaire = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/defaire.png")));
     private JButton refaire = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/refaire.png")));
-    private JButton couper = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/couper.png")));
-    private JButton copier = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/copier.png")));
-    private JButton coller = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/coller.png")));
     private JButton supprimer = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
     
 
@@ -48,23 +46,19 @@ public class ToolBar extends JToolBar
         /* Creation de la BarreOutils horizontale */
         super(JToolBar.HORIZONTAL);
         
-        polygone.addActionListener(new ActionManager(ActionToPerform.DESSINER_POLYGONE, optionsArea));
-        nouvellePage.addActionListener(new ActionManager(ActionToPerform.NOUVELLE_PAGE, optionsArea));
-        defaire.addActionListener(new ActionManager(ActionToPerform.DEFAIRE, optionsArea));
-        refaire.addActionListener(new ActionManager(ActionToPerform.REFAIRE, optionsArea));
-        couper.addActionListener(new ActionManager(ActionToPerform.COUPER, optionsArea));
-        copier.addActionListener(new ActionManager(ActionToPerform.COPIER, optionsArea));
-        coller.addActionListener(new ActionManager(ActionToPerform.COLLER, optionsArea));
-        supprimer.addActionListener(new ActionManager(ActionToPerform.SUPPRIMER, optionsArea));
+        segment.addActionListener(new ActionManager(ActionToPerform.DRAW_SEGMENT, optionsArea));
+        nouvellePage.addActionListener(new ActionManager(ActionToPerform.NEW_SHEET, optionsArea));
+        openFile.addActionListener(new ActionManager(ActionToPerform.OPEN, optionsArea));
+        defaire.addActionListener(new ActionManager(ActionToPerform.UNDO, optionsArea));
+        refaire.addActionListener(new ActionManager(ActionToPerform.REDO, optionsArea));
+        supprimer.addActionListener(new ActionManager(ActionToPerform.DELETE, optionsArea));
         
-        polygone.setToolTipText("Dessiner polygone");
-        nouvellePage.setToolTipText("Nouvelle zone de dessin");
-        defaire.setToolTipText("Défaire");
-        refaire.setToolTipText("Refaire");
-        couper.setToolTipText("Couper");
-        copier.setToolTipText("Copier");
-        coller.setToolTipText("Coller");
-        supprimer.setToolTipText("Supprimer");
+        segment.setToolTipText("Draw segment");
+        nouvellePage.setToolTipText("New sheet");
+        openFile.setToolTipText("Open File");
+        defaire.setToolTipText("Undo");
+        refaire.setToolTipText("Redo");
+        supprimer.setToolTipText("Delete");
         
         this.setLayout(new GridLayout(1, 0));
         
@@ -75,16 +69,11 @@ public class ToolBar extends JToolBar
         this.addSeparator();
 
         this.add(nouvellePage);
+        this.add(openFile);
         
         this.addSeparator();
 
-        this.add(couper);
-        this.add(copier);
-        this.add(coller);
- 
-        this.addSeparator();
-
-        this.add(polygone);
+        this.add(segment);
             
         this.setBorder(BorderFactory.createEtchedBorder());
     }

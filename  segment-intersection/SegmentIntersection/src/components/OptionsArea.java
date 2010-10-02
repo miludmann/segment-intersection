@@ -36,6 +36,7 @@ import javax.swing.event.ChangeListener;
 
 import components.DrawArea.CaracForme;
 import components.DrawArea.TypeAction;
+import computation.FindIntersections;
 
 
 
@@ -336,5 +337,12 @@ public class OptionsArea extends JPanel implements ChangeListener {
           }
         
 	}
+
+	public void findIntersections() {
+		FindIntersections fi ;
+		fi = new FindIntersections(getDrawArea().getSceneGraphArea().getSegments());		
+	}
+
+
 }
 	

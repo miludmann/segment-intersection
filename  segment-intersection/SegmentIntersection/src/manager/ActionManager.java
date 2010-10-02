@@ -11,6 +11,7 @@ import components.MenuBar;
 import components.OptionsArea;
 import components.ToolBar;
 import components.DrawArea.CaracForme;
+import computation.FindIntersections;
 
 
 /**
@@ -32,7 +33,7 @@ public class ActionManager implements ActionListener
 		NEW_SHEET, EXIT, ABOUT, UNDO, REDO,
 		ACK_DEL,DELETE,
 		DRAW_SEGMENT,
-		REDRAW_ALL, OPEN;
+		REDRAW_ALL, OPEN, FIND_INTER;
 						
 		/**
 		 * Demande au Gestionnaire d'effectuer une action 
@@ -66,7 +67,7 @@ public class ActionManager implements ActionListener
 			case ABOUT:
                 String mess = "Line segment intersection editor v1.0 \n" +
                         "Create segments and have fun visualing their intersections\n" +
-                        "Compute and save DCEL !\n\n" +
+                        "Compute and save DCELs !\n\n" +
                         "Authors : Guillaume Depoyant & Michaël Ludmann\n" +
                         "Computational Geometry Project - Fall 2010 - Aarhus University";
                 JOptionPane.showMessageDialog(null, mess, "About this editor", JOptionPane.INFORMATION_MESSAGE);
@@ -85,12 +86,17 @@ public class ActionManager implements ActionListener
 				am.getZone().addShape(CaracForme.POLYGONE);	
 				return;
 			case ACK_DEL:
-				if(JOptionPane.showConfirmDialog(null, "Ce noeud sera supprimé. Voulez-vous continuer ?", "Suppression", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION){
+				if(JOptionPane.showConfirmDialog(null, "Delete node ?", "Deletion", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION){
 					am.getZone().supprimer();	
             	}
 				return;	
 			case REDRAW_ALL:
 				am.getZone().getDrawArea().redrawAll();
+				return;
+				
+			case FIND_INTER:
+				am.getZone().findIntersections();
+				return;
 					
 			} throw new AssertionError("ActionToPerform::unknown assertion : " + this);
 		}
@@ -120,6 +126,8 @@ public class ActionManager implements ActionListener
 				return new String("Draw segment");
 			case REDRAW_ALL:
 				return new String("Redraw all");
+			case FIND_INTER:
+				return new String("Find intersections");
 
 			}
 			throw new AssertionError("ActionToPerform::unknown assertion : " + this);

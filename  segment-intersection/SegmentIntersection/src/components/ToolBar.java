@@ -38,7 +38,8 @@ public class ToolBar extends JToolBar
     private JButton defaire = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/defaire.png")));
     private JButton refaire = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/refaire.png")));
     private JButton supprimer = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
-    
+    private JButton findInter = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/find_inter.png")));
+
 
     
     public ToolBar(OptionsArea optionsArea)
@@ -52,6 +53,8 @@ public class ToolBar extends JToolBar
         defaire.addActionListener(new ActionManager(ActionToPerform.UNDO, optionsArea));
         refaire.addActionListener(new ActionManager(ActionToPerform.REDO, optionsArea));
         supprimer.addActionListener(new ActionManager(ActionToPerform.DELETE, optionsArea));
+        findInter.addActionListener(new ActionManager(ActionToPerform.FIND_INTER, optionsArea));
+
         
         segment.setToolTipText("Draw segment");
         nouvellePage.setToolTipText("New sheet");
@@ -59,6 +62,8 @@ public class ToolBar extends JToolBar
         defaire.setToolTipText("Undo");
         refaire.setToolTipText("Redo");
         supprimer.setToolTipText("Delete");
+        findInter.setToolTipText("Find Intersections");
+
         
         this.setLayout(new GridLayout(1, 0));
         
@@ -70,6 +75,10 @@ public class ToolBar extends JToolBar
 
         this.add(nouvellePage);
         this.add(openFile);
+        
+        this.addSeparator();
+        
+        this.add(findInter);
         
         this.addSeparator();
 

@@ -166,5 +166,19 @@ public class SceneGraphArea extends JPanel {
 	public void setMainWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 	}
+	
+	public JTree getTree(){
+		return tree;
+	}
+	
+	public Segment[] getSegments(){
+		int nbSegments = ((DefaultTreeModel) tree.getModel()).getChildCount(MainWindow.root);
+        Segment[] segments = new Segment[nbSegments];
+        for (int i=0; i<nbSegments; i++)
+        {
+        	segments[i] = (Segment) ((DefaultTreeModel) tree.getModel()).getChild(MainWindow.root, i);
+        }
+        return segments;
+	}
 
 }

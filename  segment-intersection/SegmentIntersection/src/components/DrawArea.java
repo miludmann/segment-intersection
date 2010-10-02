@@ -713,4 +713,8 @@ public class DrawArea extends JPanel implements MouseListener,
 	public void setFenetrePrincipale(MainWindow fenetrePrincipale) {
 		this.mainWindow = fenetrePrincipale;
 	}
+	
+	public SceneGraphArea getSceneGraphArea(){
+		return this.sceneGraphArea;
+	}
 }

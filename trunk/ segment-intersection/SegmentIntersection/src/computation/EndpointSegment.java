@@ -17,7 +17,7 @@ public class EndpointSegment {
 	 * 
 	 */
 	private Segment segment;
-	private Point2D point;
+	private Point2D.Float point;
 	
 	public EndpointSegment() {
 		segment = new Segment();
@@ -34,8 +34,16 @@ public class EndpointSegment {
 		this.segment = seg;
 	}
 	
-	public Point2D getPoint(){
+	public Point2D.Float getPoint(){
 		return point;
+	}
+	
+	public Float getX(){
+		return point.x;
+	}
+	
+	public Float getY(){
+		return point.y;
 	}
 	
 	public Segment getSegment(){

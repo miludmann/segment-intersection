@@ -1,13 +1,14 @@
 package sceneGraph;
 
 import java.util.ArrayList;
+import java.awt.geom.Point2D;
 
 /**
  * <p>
- * <b>Polygon</b>
+ * <b>Segment</b>
  * </p>
  * <p>
- * Polygon est la classe implémentant les polygons
+ * 
  * </p>
  * @author Depoyant Guillaume & Ludmann Michaël
  *
@@ -18,11 +19,16 @@ public class Segment extends Shape {
 	private java.awt.Polygon segment;
 	private float[] xpoints;
 	private float[] ypoints;
+	private Point2D.Float upperEndpoint;
+	private Point2D.Float lowerEndpoint;
+
 
 	public Segment() {
 		segment = new java.awt.Polygon();
 		xpoints = null;
 		ypoints = null;
+		upperEndpoint = new Point2D.Float();
+		lowerEndpoint = new Point2D.Float();
 	}
 	
 	public Segment(float[] xpoints, float[] ypoints, int npoints) {
@@ -38,6 +44,7 @@ public class Segment extends Shape {
 
 		}
 		segment = new java.awt.Polygon(xpointsInt, ypointsInt, npoints);
+		computeEndpoints();
 	}
 	
 	public Segment(ArrayList<float[]> points) {
@@ -55,6 +62,7 @@ public class Segment extends Shape {
 		}
 		setXpoints(xpoints);
 		setYpoints(ypoints);
+		computeEndpoints();
 	}
 	
 	public void setSegment(ArrayList<float[]> points) {
@@ -92,5 +100,26 @@ public class Segment extends Shape {
 
 	public void setYpoints(float[] ypoints) {
 		this.ypoints = ypoints;
+	}
+	
+	public void computeEndpoints() {
+		if(xpoints.length == 2 && ypoints.length == 2)
+		{
+			if((ypoints[0] > ypoints[1]) || (ypoints[0] == ypoints[1] && xpoints[0] <= xpoints[1])){
+				upperEndpoint.setLocation(xpoints[0], ypoints[0]);
+				lowerEndpoint.setLocation(xpoints[1], ypoints[1]);
+			} else {
+				upperEndpoint.setLocation(xpoints[1], ypoints[1]);
+				lowerEndpoint.setLocation(xpoints[0], ypoints[0]);
+			}
+		}	
+	}
+	
+	public Point2D.Float getLowerEndpoint(){
+		return this.lowerEndpoint;
+	}
+	
+	public Point2D.Float getUpperEndpoint(){
+		return this.upperEndpoint;
 	}
 }

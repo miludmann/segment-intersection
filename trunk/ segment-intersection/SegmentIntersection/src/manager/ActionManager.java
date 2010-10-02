@@ -65,7 +65,8 @@ public class ActionManager implements ActionListener
 				return;
 			case ABOUT:
                 String mess = "Line segment intersection editor v1.0 \n" +
-                        "Create segments and have fun visualing their intersections\n\n" +
+                        "Create segments and have fun visualing their intersections\n" +
+                        "Compute and save DCEL !\n\n" +
                         "Authors : Guillaume Depoyant & Michaël Ludmann\n" +
                         "Computational Geometry Project - Fall 2010 - Aarhus University";
                 JOptionPane.showMessageDialog(null, mess, "About this editor", JOptionPane.INFORMATION_MESSAGE);
@@ -102,23 +103,23 @@ public class ActionManager implements ActionListener
 			switch (this)
 			{
 			case NEW_SHEET:
-				return new String("Nouvelle Page");
+				return new String("New Sheet");
 			case EXIT:
-				return new String("Quitter");
+				return new String("Exit");
 			case ABOUT:
-				return new String("A propos");
+				return new String("About");
 			case UNDO:
-				return new String("Defaire");
+				return new String("Undo");
 			case REDO:
-				return new String("Refaire");
+				return new String("Redo");
 			case DELETE:
-				return new String("Supprimer");
+				return new String("Delete");
 			case ACK_DEL:
-				return new String("Confirmer Suppression");
+				return new String("Acknowledge deletion");
 			case DRAW_SEGMENT:
-				return new String("Dessiner polygone");
+				return new String("Draw segment");
 			case REDRAW_ALL:
-				return new String("Redessiner tout");
+				return new String("Redraw all");
 
 			}
 			throw new AssertionError("ActionToPerform::unknown assertion : " + this);

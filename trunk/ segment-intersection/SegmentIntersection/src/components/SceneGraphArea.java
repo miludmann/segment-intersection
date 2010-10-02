@@ -90,7 +90,7 @@ public class SceneGraphArea extends JPanel {
   
 
     /**
-     * Permet le rafraichissement du graphe de scène
+     * Refresh SceneGraph
      */
     public void reload() {
         ((DefaultTreeModel) tree.getModel()).reload();

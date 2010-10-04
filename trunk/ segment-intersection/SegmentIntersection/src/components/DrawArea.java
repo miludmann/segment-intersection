@@ -118,6 +118,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	private TypeAction typeDessin = TypeAction.DESSIN;
 	private Cursor curseurDessin = new Cursor(Cursor.CROSSHAIR_CURSOR);
 	private Cursor curseurSelection = new Cursor(Cursor.DEFAULT_CURSOR);
+	protected float RADIUS = 5.0F;
 
 	private boolean mouseMoved;	
 	private JPopupMenu popupMenu;	
@@ -360,11 +361,18 @@ public class DrawArea extends JPanel implements MouseListener,
 		System.out.println("DEBUG "+pointSegmentStart[0]+" "+pointSegmentEnd[0]+" "+pointSegmentStart[1]+" "+pointSegmentEnd[1]);
 		points.add(pointSegmentStart);
 		points.add(pointSegmentEnd);
-		System.out.println("NINI ");
         currentShape = new Segment(points);
 		currentShape.setSkin(new Skin(currentSkin));
         MainWindow.root.addNode(currentShape);
         redrawAll();		
+	}
+	
+	public void createIntersection(float x, float y)
+	{
+		currentShape = new Intersection(x, y, RADIUS);
+		currentShape.setSkin(new Skin(currentSkin));
+        MainWindow.root.addNode(currentShape);
+        redrawAll();
 	}
 
 	// ------------------------------------------------------------------------

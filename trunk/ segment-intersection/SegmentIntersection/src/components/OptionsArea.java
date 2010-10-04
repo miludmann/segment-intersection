@@ -339,8 +339,9 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	}
 
 	public void findIntersections() {
+		getDrawArea().getSceneGraphArea().removeIntersections();
 		FindIntersections fi ;
-		fi = new FindIntersections(getDrawArea().getSceneGraphArea().getSegments());		
+		fi = new FindIntersections(getDrawArea(), getDrawArea().getSceneGraphArea().getSegments());		
 	}
 
 

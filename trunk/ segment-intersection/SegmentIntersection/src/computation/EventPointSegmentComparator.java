@@ -3,9 +3,9 @@ package computation;
 import java.awt.geom.Point2D;
 import java.util.Comparator;
 
-public class EndpointSegmentComparator implements Comparator<EndpointSegment> {
+public class EventPointSegmentComparator implements Comparator<EventPointSegment> {
 
-	 public int compare(EndpointSegment obj1, EndpointSegment obj2) {
+	 public int compare(EventPointSegment obj1, EventPointSegment obj2) {
 		 Point2D p1 = obj1.getPoint();
 		 Point2D p2 = obj2.getPoint();
 		 

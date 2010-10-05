@@ -30,7 +30,7 @@ public class ThicknessManager implements ItemListener
 	{
 		this.widths = widths;
 		this.drawPanel = drawPanel;
-		drawPanel.getApparenceCourante().setLineThickness(this.widths[0]);
+		drawPanel.getCurrentSkin().setLineThickness(this.widths[0]);
 	}
 	
 	/**
@@ -43,9 +43,9 @@ public class ThicknessManager implements ItemListener
 	public void itemStateChanged(ItemEvent e)
 	{
 		JComboBox liste = (JComboBox) e.getSource();
-		drawPanel.getApparenceCourante().setLineThickness(widths[liste.getSelectedIndex()]);
+		drawPanel.getCurrentSkin().setLineThickness(widths[liste.getSelectedIndex()]);
 
-		drawPanel.setApparenceSelection(new Skin(drawPanel.getApparenceCourante()));
+		drawPanel.setApparenceSelection(new Skin(drawPanel.getCurrentSkin()));
 	}
 
 }

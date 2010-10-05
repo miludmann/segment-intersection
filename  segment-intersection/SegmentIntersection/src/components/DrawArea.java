@@ -118,7 +118,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	private TypeAction typeDessin = TypeAction.DESSIN;
 	private Cursor curseurDessin = new Cursor(Cursor.CROSSHAIR_CURSOR);
 	private Cursor curseurSelection = new Cursor(Cursor.DEFAULT_CURSOR);
-	protected float RADIUS = 5.0F;
+	protected float RADIUS = 2.0F;
 
 	private boolean mouseMoved;	
 	private JPopupMenu popupMenu;	
@@ -370,7 +370,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	public void createIntersection(float x, float y)
 	{
 		currentShape = new Intersection(x, y, RADIUS);
-		currentShape.setSkin(new Skin(currentSkin));
+		currentShape.setSkin(new Skin(1, new Color(255,0,0), new Color(255, 0, 0)));
         MainWindow.root.addNode(currentShape);
         redrawAll();
 	}
@@ -534,14 +534,14 @@ public class DrawArea extends JPanel implements MouseListener,
         case DESSIN:
 			selection.clear();
             setCursor(curseurDessin);
-        	statusBar.afficherMessage("Cliquez puis faîtes glisser le pointeur pour dessiner.");
+        	statusBar.afficherMessage("Press and drag mouse to draw");
             break;
         case SELECTION:
            setCursor(curseurSelection);
            if (selection.size() == 2)
            	statusBar.afficherMessage("Clic droit pour composer les deux figures.");
            else
-           	statusBar.afficherMessage("Cliquez sur une figure pour la sélectionner. Maintenez la touche Ctrl enfoncée pour sélectionner plusieurs figures.");
+           	statusBar.afficherMessage("Press mouse on shape to select it. Press CTRL to select many.");
            break;
         }
         
@@ -564,7 +564,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	 * Obtenir l'apparence courante
 	 * @return l'apprence courante
 	 */
-	public Skin getApparenceCourante() {
+	public Skin getCurrentSkin() {
 		return currentSkin;
 	}
 	
@@ -572,7 +572,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	 * Définir l'apparence courante
 	 * @param apparence l'apparence à appliquer
 	 */
-	public void setApparenceCourante(Skin apparence) {
+	public void setCurrentSkin(Skin apparence) {
 		this.currentSkin = apparence;
 	}
 	

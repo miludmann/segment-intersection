@@ -41,9 +41,9 @@ public class ColorManager implements ItemListener
 		Paint paint = this.colors[0];
         if (type==0) 
         {
-        	drawPanel.getApparenceCourante().setLineColor((Color)paint);
+        	drawPanel.getCurrentSkin().setLineColor((Color)paint);
         } else if (type==1) {
-            drawPanel.getApparenceCourante().setInnerPaint(paint);
+            drawPanel.getCurrentSkin().setInnerPaint(paint);
         }
 	}
 	
@@ -61,11 +61,11 @@ public class ColorManager implements ItemListener
 		Paint paint = colors[liste.getSelectedIndex()];
 		if (type == 0) 
 		{
-			drawPanel.getApparenceCourante().setLineColor((Color)paint);
+			drawPanel.getCurrentSkin().setLineColor((Color)paint);
         } else if (type == 1) {
-            drawPanel.getApparenceCourante().setInnerPaint(paint);
+            drawPanel.getCurrentSkin().setInnerPaint(paint);
         }
 
-		drawPanel.setApparenceSelection(new Skin(drawPanel.getApparenceCourante()));
+		drawPanel.setApparenceSelection(new Skin(drawPanel.getCurrentSkin()));
 	}
 }

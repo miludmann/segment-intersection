@@ -47,7 +47,7 @@ public class ActionManager implements ActionListener
 			switch (this) 
 			{
 			case NEW_SHEET:
-				am.getZone().supprimerTout();	
+				am.getZone().deleteAll();	
 				return;
 			case OPEN:
 				JFileChooser fc;

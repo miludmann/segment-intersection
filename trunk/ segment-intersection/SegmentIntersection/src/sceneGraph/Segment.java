@@ -30,6 +30,7 @@ public class Segment extends Shape implements Key{
     public static final float MAX_SLOPE = 99999999999999.906F;
     private float value;
     private RedBlackNode node;
+	private int id;
 
 	public Segment() {
 		segment = new java.awt.Polygon();
@@ -40,6 +41,7 @@ public class Segment extends Shape implements Key{
 		rightEndpoint = new Point2D.Float();
 		leftEndpoint = new Point2D.Float();
 		value = -1;
+		id = -1;
 	}
 	
 	public Segment(float[] xpoints, float[] ypoints, int npoints) {
@@ -61,6 +63,12 @@ public class Segment extends Shape implements Key{
 	
 	public Segment(ArrayList<float[]> points) {
 		this();
+		setSegment(points);
+	}
+	
+	public Segment(ArrayList<float[]> points, int id) {
+		this();
+		this.id = id;
 		setSegment(points);
 	}
 	
@@ -92,6 +100,7 @@ public class Segment extends Shape implements Key{
 		}
 		setSegment(xpoints, ypoints, npoints);
 	}
+	
 	
 	public float[] getXpoints() {
 		return this.xpoints;
@@ -155,7 +164,22 @@ public class Segment extends Shape implements Key{
 	}
 	public void printSegment()
 	{
-		System.out.println("Segment : upperEndPoint = "+upperEndpoint+" lowerEndPoint = "+lowerEndpoint);
+		System.out.println("Segment "+id+" : upperEndPoint = "+upperEndpoint+" lowerEndPoint = "+lowerEndpoint);
+	}
+	
+	public String toString()
+	{
+		return "Segment "+id+" : [{"+upperEndpoint.getX()+", "+upperEndpoint.getY()+"} ; {"+ lowerEndpoint.getX()+", "+lowerEndpoint.getY()+"}]";
+	}
+	
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	
+	public int getId()
+	{
+		return this.id;
 	}
 	
 	public void setSlope()
@@ -187,9 +211,35 @@ public class Segment extends Shape implements Key{
 	
 	public boolean containsPoint(Point2D p)
 	{
-		return (((p.getY()-ypoints[0])/(p.getX()-xpoints[0]) - getSlope()) <= 1.0000000000000001E-009F) && isInBoundingBox(p);	
+		if (p.equals(lowerEndpoint) || p.equals(upperEndpoint))
+		{
+			return true;
+		}
+		return (Math.abs(((p.getY()-ypoints[0])/(p.getX()-xpoints[0]) - getSlope())) <= 1.0001E-002F) && isInBoundingBox(p);	
+	}
+	
+	// return 1 if p is on the left side of the segment (0 = on ; -1 = right)
+	public int isLeft(Point2D.Float p)
+	{
+		float res = (lowerEndpoint.x - p.x)*(upperEndpoint.y - p.y) - (upperEndpoint.x - p.x)*(lowerEndpoint.y - p.y);
+		if (res > 0)
+		{
+			return 1;
+		} else {
+			if (res == 0)
+			{
+				return 0;
+			} else {
+				return -1;
+			}
+		}
 	}
 
+	
+	public float getCurrentAbscisse(float Y)
+	{
+		return (Y-originOrdinate)/slope;
+	}
 	
 	public void updateValue(float newY)
 	{

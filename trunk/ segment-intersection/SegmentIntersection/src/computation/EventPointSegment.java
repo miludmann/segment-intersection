@@ -66,6 +66,7 @@ public class EventPointSegment {
 		isIntersection = true;
 	}
 	
+	// set boolean to True if this point is reported as an intersection
 	public boolean isIntersection()
 	{
 		return isIntersection;

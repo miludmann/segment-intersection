@@ -15,6 +15,7 @@ public class Intersection extends Ellipse {
 	
 	private float radius;
 	protected float RADIUS = 10F;
+	private float x, y;
 	/**
 	 * <p>
 	 * Constructeur de la classe
@@ -25,11 +26,15 @@ public class Intersection extends Ellipse {
 	 */
 	public Intersection(float x, float y, float radius) {
 		super();
+		this.x = x;
+		this.y = y;
 		setFrame(x, y, radius);
 	}
 	
 	public Intersection(float x, float y) {
 		super();
+		this.x = x;
+		this.y = y;
 		setFrame(x, y, RADIUS);
 	}
 	
@@ -50,5 +55,10 @@ public class Intersection extends Ellipse {
 	public void setFrame(float x, float y, float radius) {
 		setFrame(x - radius, y - radius, x + radius, y + radius);
 		this.radius = radius;
+	}
+	
+	public String toString()
+	{
+		return "Intersection : {"+this.x+", "+this.y+"}";
 	}
 }

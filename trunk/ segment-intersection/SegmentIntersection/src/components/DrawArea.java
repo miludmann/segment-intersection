@@ -375,12 +375,15 @@ public class DrawArea extends JPanel implements MouseListener,
         nbSegments ++;
 	}
 	
-	public void createIntersection(float x, float y)
+	public Intersection createIntersection(float x, float y)
 	{
 		currentShape = new Intersection(x, y, RADIUS);
 		currentShape.setSkin(new Skin(1, new Color(255,0,0), new Color(255, 0, 0)));
         MainWindow.root.addNode(currentShape);
+        
+        Intersection newIntersection = (Intersection) currentShape; // copy intersection because redrawAll() clears currentShape
         redrawAll();
+        return newIntersection;
 	}
 
 	// ------------------------------------------------------------------------

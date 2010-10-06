@@ -1,5 +1,7 @@
 package sceneGraph;
 
+import java.util.ArrayList;
+
 /**
  * <p>
  * <b>Circle</b>
@@ -16,6 +18,7 @@ public class Intersection extends Ellipse {
 	private float radius;
 	protected float RADIUS = 10F;
 	private float x, y;
+	private ArrayList<Segment> segments;
 	/**
 	 * <p>
 	 * Constructeur de la classe
@@ -29,6 +32,7 @@ public class Intersection extends Ellipse {
 		this.x = x;
 		this.y = y;
 		setFrame(x, y, radius);
+		segments = new ArrayList<Segment>();
 	}
 	
 	public Intersection(float x, float y) {
@@ -36,6 +40,7 @@ public class Intersection extends Ellipse {
 		this.x = x;
 		this.y = y;
 		setFrame(x, y, RADIUS);
+		segments = new ArrayList<Segment>();
 	}
 	
 	/**
@@ -60,5 +65,19 @@ public class Intersection extends Ellipse {
 	public String toString()
 	{
 		return "Intersection : {"+this.x+", "+this.y+"}";
+	}
+	
+	/**
+	 * Set the list of segments that are part of the intersection
+	 * @param list
+	 */
+	public void setSegments(ArrayList<Segment> list)
+	{
+		this.segments = list;
+	}
+	
+	public ArrayList<Segment> getSegments()
+	{
+		return this.segments;
 	}
 }

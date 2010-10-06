@@ -98,13 +98,14 @@ public class MainWindow extends JFrame
         /* Création des différents éléments de la fenêtre */
         statusBar = new StatusBar();
         sceneGraphArea = new SceneGraphArea();
-        setZoneDessin(new DrawArea(statusBar, sceneGraphArea));
+        setDrawArea(new DrawArea(statusBar, sceneGraphArea));
         optionsArea = new OptionsArea(getZoneDessin());
         toolBar = new ToolBar(optionsArea);
         menuBar = new MenuBar(optionsArea);
                
         /* Séparation de la fenêtre en une zone de dessin et une zone de graphe de scène */
         splitArea = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sceneGraphArea, getZoneDessin());
+        sceneGraphArea.addMenus(optionsArea);
 
         
         /* Ajout de la barre de menu a la fenetre */
@@ -136,7 +137,7 @@ public class MainWindow extends JFrame
 	}
 
 	@SuppressWarnings("static-access")
-	public void setZoneDessin(DrawArea drawPanel) {
+	public void setDrawArea(DrawArea drawPanel) {
 		this.drawArea = drawPanel;
 	}
 

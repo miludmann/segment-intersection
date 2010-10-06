@@ -28,6 +28,9 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 
+
+
+
 /**
  * <p>
  * <b>Zone du scène de graphe</b>
@@ -88,7 +91,6 @@ public class SceneGraphArea extends JPanel {
     }
     
   
-
     /**
      * Refresh SceneGraph
      */
@@ -105,6 +107,51 @@ public class SceneGraphArea extends JPanel {
         }
         System.out.println();
        
+    }
+    
+    public void addMenus(final OptionsArea zoneOptions)
+    {
+        /** Listeners pour menu contextuel s'ouvrant en cas de clic droit sur un noeud de l'arbre */
+        /* Permet de supprimer un noeud, et de redessiner toute la zone de dessin avec la(les) forme(s) supprimée(s) en moins
+        Confirmation demandée, par sécurité */
+        popupMenu.add(supprimer);       
+
+       
+
+        /* Ajout du listener gérant le clic droit */
+        tree.addMouseListener(new MouseAdapter() 
+        {
+                /* Les deux méthodes suivantes sont identiques, il s'agit ici de gérer les types de clics qui diffèrent suivant les OS, mais qui doivent produire le même résultat */
+            public void mouseReleased(MouseEvent e) 
+            {
+                int selRow = tree.getRowForLocation(e.getX(), e.getY());
+                TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+                tree.clearSelection();
+                tree.setSelectionPath(selPath);
+                SceneGraphTree node = ((SceneGraphTree) tree.getLastSelectedPathComponent());
+                    if (selRow != -1) 
+                    {
+                         if (e.isPopupTrigger()) 
+                         {
+                                // On affiche le menu
+                        		menuForme.setEnabled(!(node instanceof Shape));
+                                popupMenu.show(tree, e.getX(), e.getY());
+                                System.out.println("Right clic on node : "+node);
+                                
+                         }
+                         
+                         selection.clear();
+                         if (node.getLevel() == 1)
+                                 selection.add(node);
+                         
+                         zoneOptions.getDrawArea().setSelection(selection);
+                   }
+            }
+            public void mousePressed(MouseEvent e) 
+            {
+                this.mouseReleased(e);
+            }
+        });
     }
     
     /**

@@ -201,35 +201,21 @@ public class DrawArea extends JPanel implements MouseListener,
 			}
 
 		}
-		
 		if (!selection.isEmpty())
 		{
-	        g2d.setStroke(new BasicStroke());
-	        g2d.setColor(new Color(50,80,150));
-			for (SceneGraphTree s : selection)
-			{
-				Rectangle2D rectangle = s.getBounds2D();
-				double x0 = rectangle.getMinX() - 3;
-				double x1 = rectangle.getMaxX() - 3;
-				double y0 = rectangle.getMinY() - 3;
-				double y1 = rectangle.getMaxY() - 3;
-				double w = rectangle.getMinX() + rectangle.getWidth()/2 - 3;
-				double h = rectangle.getMinY() + rectangle.getHeight()/2 - 3;
-				double larg = rectangle.getMinX() + rectangle.getWidth()/2 - 8;
-				double haut = rectangle.getMinY() + rectangle.getHeight()/2 - 8;
-				
-                g2d.draw(rectangle);
-                
-                g2d.draw(new Rectangle2D.Double(x0, y0, 6, 6));
-                g2d.draw(new Rectangle2D.Double(x0, y1, 6, 6));
-                g2d.draw(new Rectangle2D.Double(x1, y0, 6, 6));
-                g2d.draw(new Rectangle2D.Double(x1, y1, 6, 6));
-                g2d.draw(new Rectangle2D.Double(x0, h, 6, 6));
-                g2d.draw(new Rectangle2D.Double(x1, h, 6, 6));
-                g2d.draw(new Rectangle2D.Double(w, y0, 6, 6));
-                g2d.draw(new Rectangle2D.Double(w, y1, 6, 6));
-                g2d.draw(new Ellipse2D.Double(larg, haut, 12, 12));
-			}
+			setApparenceSelection(new Skin(1, new Color(0,255,0), new Color(0, 255, 0)));
+
+//	        g2d.setStroke(new BasicStroke());
+//	        g2d.setColor(new Color(50,80,150));
+//			for (SceneGraphTree s : selection)
+//			{
+//				Rectangle2D rectangle = s.getBounds2D();
+//				double larg = rectangle.getMinX() + rectangle.getWidth()/2 - 8;
+//				double haut = rectangle.getMinY() + rectangle.getHeight()/2 - 8;              
+//              g2d.draw(new Ellipse2D.Double(larg, haut, 12, 12));
+//                
+//
+//			}
 		}
 		
 	}
@@ -303,6 +289,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	            SceneGraphTree s = MainWindow.root.getNodeAt(x, y);
 	            
                 if (!e.isControlDown())
+        			setApparenceSelection(currentSkin);
                     selection.clear();
                 
 	            if (s != null)
@@ -313,7 +300,6 @@ public class DrawArea extends JPanel implements MouseListener,
 	            		selection.add(s);
 	            }
 	            
-				setTypeDessin(TypeAction.SELECTION);
 	    	}
 	    	
 				
@@ -346,8 +332,10 @@ public class DrawArea extends JPanel implements MouseListener,
 			        float[] ySegment = ((Segment) currentShape).getYpoints();
 
 			        float[] pointSegmentStart = {xSegment[0], ySegment[0]};
-			        float[] pointSegmentEnd = {xSegment[1], ySegment[1]};
-			        loadSegment(pointSegmentStart, pointSegmentEnd);
+			        try {
+			        	float[] pointSegmentEnd = {xSegment[1], ySegment[1]};
+				        loadSegment(pointSegmentStart, pointSegmentEnd);
+			        } catch (ArrayIndexOutOfBoundsException ex) {}
 			        
 //			        System.out.printf("New Segment start : "+xSegment[0]+" "+ySegment[0]+"\n");
 //			        System.out.printf("New Segment end : "+xSegment[1]+" "+ySegment[1]+"\n\n");
@@ -414,7 +402,6 @@ public class DrawArea extends JPanel implements MouseListener,
 		if (numButton == MouseEvent.BUTTON1)
 		{
 			float[] point = {x, y};
-			int taillePoints = points.size();
 			
 			if (points.size() >= 2)
 			{
@@ -422,8 +409,15 @@ public class DrawArea extends JPanel implements MouseListener,
 			}
 			points.add(point);
 			//points.set(taillePoints - 1, point);
-			((Segment)currentShape).setSegment(points);
-			
+			if(points.size() == 2)
+			{
+				try{
+					((Segment)currentShape).setSegment(points);
+				} catch (NullPointerException ex) { 
+					this.typeDessin = TypeAction.DESSIN;
+					points.clear();
+				}
+			}
 			repaint();
 		}
 	}
@@ -490,11 +484,11 @@ public class DrawArea extends JPanel implements MouseListener,
 			{
 				transformeNoeud = s;
 				
-				setTypeDessin(TypeAction.SELECTION);
+				setDrawingType(TypeAction.SELECTION);
 			}
 		}
 		else if (typeDessin != TypeAction.DESSIN)
-			setTypeDessin(TypeAction.SELECTION);
+			setDrawingType(TypeAction.SELECTION);
 	}
 
 	/**
@@ -538,11 +532,12 @@ public class DrawArea extends JPanel implements MouseListener,
 	 * Définir le type du dessin
 	 * @param typeDessin
 	 */
-	public void setTypeDessin(TypeAction typeDessin) {
+	public void setDrawingType(TypeAction typeDessin) {
 		this.typeDessin = typeDessin;
         switch (typeDessin)
         {
         case DESSIN:
+			setApparenceSelection(currentSkin);
 			selection.clear();
             setCursor(curseurDessin);
         	statusBar.afficherMessage("Press and drag mouse to draw");
@@ -550,7 +545,7 @@ public class DrawArea extends JPanel implements MouseListener,
         case SELECTION:
            setCursor(curseurSelection);
            if (selection.size() == 2)
-           	statusBar.afficherMessage("Clic droit pour composer les deux figures.");
+           	statusBar.afficherMessage("Right clic to make a composition of both shapes.");
            else
            	statusBar.afficherMessage("Press mouse on shape to select it. Press CTRL to select many.");
            break;
@@ -595,6 +590,7 @@ public class DrawArea extends JPanel implements MouseListener,
 		currentShape = null;
         points.clear();
         sceneGraphArea.reload();
+        this.typeDessin = TypeAction.DESSIN;
         repaint();
 	}
 	
@@ -730,7 +726,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	 * Setter of the property <tt>fenetrePrincipale</tt>
 	 * @param fenetrePrincipale  The fenetrePrincipale to set.
 	 */
-	public void setFenetrePrincipale(MainWindow fenetrePrincipale) {
+	public void setMainWindow(MainWindow fenetrePrincipale) {
 		this.mainWindow = fenetrePrincipale;
 	}
 	

@@ -31,6 +31,9 @@ public class Segment extends Shape implements Key{
     private float value;
     private RedBlackNode node;
 	private int id;
+	private boolean isVertical = false;
+	private boolean isHorizontal = false;
+	protected float ERROR_ALLOWED = 1.0001E-002F;
 
 	public Segment() {
 		segment = new java.awt.Polygon();
@@ -187,9 +190,25 @@ public class Segment extends Shape implements Key{
 		if (xpoints[1]-xpoints[0] == 0)
 		{
 			slope = MAX_SLOPE;
+			isVertical  = true;
 		} else {
 			slope = (ypoints[1]-ypoints[0])/(xpoints[1]-xpoints[0]);
+			if (slope == 0)
+			{
+				isHorizontal = true;
+				setValue(Float.MIN_VALUE);
+			}
 		}
+	}
+	
+	public boolean isVertical()
+	{
+		return isVertical;
+	}
+	
+	public boolean isHorizontal()
+	{
+		return isHorizontal;
 	}
 	
 	public void setOriginOrdinate()
@@ -211,11 +230,11 @@ public class Segment extends Shape implements Key{
 	
 	public boolean containsPoint(Point2D p)
 	{
-		if (p.equals(lowerEndpoint) || p.equals(upperEndpoint))
+		if (p.equals(lowerEndpoint) || p.equals(upperEndpoint) || (isVertical() && Math.abs(p.getX() - lowerEndpoint.x) <= ERROR_ALLOWED))
 		{
 			return true;
 		}
-		return (Math.abs(((p.getY()-ypoints[0])/(p.getX()-xpoints[0]) - getSlope())) <= 1.0001E-002F) && isInBoundingBox(p);	
+		return (Math.abs(((p.getY()-ypoints[0])/(p.getX()-xpoints[0]) - getSlope())) <= ERROR_ALLOWED) && isInBoundingBox(p);	
 	}
 	
 	// return 1 if p is on the left side of the segment (0 = on ; -1 = right)
@@ -243,7 +262,12 @@ public class Segment extends Shape implements Key{
 	
 	public void updateValue(float newY)
 	{
-		value = (newY-originOrdinate)/slope;
+		if(!isHorizontal())
+		{
+			value = (newY-originOrdinate)/slope;
+		} else {
+			value = newY;
+		}
 	}
 	
 	public boolean equals(Object obj)
@@ -323,7 +347,7 @@ public class Segment extends Shape implements Key{
 
 	@Override
 	public void setValue(float d) {
-		value = d;
+			value = d;
 	}
 
 	@Override

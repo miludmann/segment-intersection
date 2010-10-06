@@ -33,7 +33,7 @@ public class ActionManager implements ActionListener
 		NEW_SHEET, EXIT, ABOUT, UNDO, REDO,
 		ACK_DEL,DELETE,
 		DRAW_SEGMENT,
-		REDRAW_ALL, OPEN, FIND_INTER;
+		REDRAW_ALL, OPEN, FIND_INTER, FIND_DCEL;
 						
 		/**
 		 * Demande au Gestionnaire d'effectuer une action 
@@ -97,6 +97,12 @@ public class ActionManager implements ActionListener
 			case FIND_INTER:
 				am.getZone().findIntersections();
 				return;
+				
+			case FIND_DCEL:
+				am.getZone().findDCEL();
+				return;
+				
+			
 					
 			} throw new AssertionError("ActionToPerform::unknown assertion : " + this);
 		}
@@ -128,6 +134,9 @@ public class ActionManager implements ActionListener
 				return new String("Redraw all");
 			case FIND_INTER:
 				return new String("Find intersections");
+			case FIND_DCEL:
+				return new String("Find DCEL");
+			
 
 			}
 			throw new AssertionError("ActionToPerform::unknown assertion : " + this);

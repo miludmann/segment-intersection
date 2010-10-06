@@ -118,7 +118,8 @@ public class DrawArea extends JPanel implements MouseListener,
 	private TypeAction typeDessin = TypeAction.DESSIN;
 	private Cursor curseurDessin = new Cursor(Cursor.CROSSHAIR_CURSOR);
 	private Cursor curseurSelection = new Cursor(Cursor.DEFAULT_CURSOR);
-	protected float RADIUS = 2.0F;
+	protected float RADIUS = 2.5F;
+	private int nbSegments = 0;
 
 	private boolean mouseMoved;	
 	private JPopupMenu popupMenu;	
@@ -350,6 +351,7 @@ public class DrawArea extends JPanel implements MouseListener,
 			        currentShape.setSkin(new Skin(currentSkin));
 			        MainWindow.root.addNode(currentShape);
 			        redrawAll();
+			        nbSegments++;
 				}
 			}
 		}	
@@ -361,10 +363,11 @@ public class DrawArea extends JPanel implements MouseListener,
 		System.out.println("DEBUG "+pointSegmentStart[0]+" "+pointSegmentEnd[0]+" "+pointSegmentStart[1]+" "+pointSegmentEnd[1]);
 		points.add(pointSegmentStart);
 		points.add(pointSegmentEnd);
-        currentShape = new Segment(points);
+        currentShape = new Segment(points, nbSegments);
 		currentShape.setSkin(new Skin(currentSkin));
         MainWindow.root.addNode(currentShape);
         redrawAll();		
+        nbSegments ++;
 	}
 	
 	public void createIntersection(float x, float y)
@@ -452,7 +455,7 @@ public class DrawArea extends JPanel implements MouseListener,
 		currentShape = null;
 
 		points.add(point);
-        currentShape = new Segment(points);
+        currentShape = new Segment(points, nbSegments);
 
 		if (currentShape != null)
 	        currentShape.setSkin(new Skin(currentSkin));
@@ -590,10 +593,11 @@ public class DrawArea extends JPanel implements MouseListener,
 	/**
 	 * Permet de tout supprimer à l'écran (zone de dessin + graphe de scène)
 	 */
-	public void supprimerTout() {
+	public void deleteAll() {
 		MainWindow.root.removeAll();
     	selection.clear();
 		redrawAll();
+		nbSegments = 0;
 	}
 
 	/**

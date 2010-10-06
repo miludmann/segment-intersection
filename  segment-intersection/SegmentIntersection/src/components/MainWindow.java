@@ -120,7 +120,7 @@ public class MainWindow extends JFrame
         /* Montrer la frame */
         this.setVisible(true);
         
-        splitArea.setDividerLocation(0.175);
+        splitArea.setDividerLocation(0.35);
 
         this.addComponentListener(new ComponentAdapter() 
         {        	

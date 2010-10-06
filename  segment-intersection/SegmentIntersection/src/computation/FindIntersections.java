@@ -77,8 +77,8 @@ public class FindIntersections {
 		ArrayList<Segment> lSet = new ArrayList<Segment>();	
 		ArrayList<Segment> cSet = new ArrayList<Segment>();	
 
-		
-		System.out.println("Handle p : {X = "+evtPoint.getX()+ ", Y = "+evtPoint.getY()+"}");
+		System.out.println();
+		System.out.println("Handling p : {X = "+evtPoint.getX()+ ", Y = "+evtPoint.getY()+"}");
 		
 		// Build set U(evtPoint) : set of segments whose upper endpoint is evtPoint
 		if(!evtSet.isEmpty())
@@ -88,7 +88,6 @@ public class FindIntersections {
 				if(evtSet.get(i).getUpperEndpoint() == evtPoint)
 				{
 					uSet.add(evtSet.get(i));
-//					treeInsertBlock(evtSet.get(i));
 				}
 			}
 		}
@@ -97,9 +96,11 @@ public class FindIntersections {
 		lpSet = SegmentsContainingEventPoint(sweepLineStatus, evtPointSeg);
 		for(int i = 0; i<lpSet.size(); i++)
 		{
+//			System.out.println(lpSet.toString());
 			if(lpSet.get(i).getLowerEndpoint().equals(evtPoint))
 			{
 				// Set of segments whose lowerEndpoint is evtPoint
+//				System.out.println("Curr evt pt is lowerpoint of : "+lpSet.get(i).toString());
 				lSet.add(lpSet.get(i));
 			} else {
 				// Set of segments who contain evtPoint in their interior
@@ -110,7 +111,7 @@ public class FindIntersections {
 		// Report intersection
 		if(uSet.size() + lSet.size() + cSet.size() > 1)
 		{
-			System.out.println("Intersection found here ! : {X = "+evtPoint.getX()+", Y = "+evtPoint.getY()+"}");
+			evtPointSeg.isIntersection();
 			getDrawArea().createIntersection(evtPoint.x, evtPoint.y);
 		}
 		
@@ -127,6 +128,7 @@ public class FindIntersections {
 			cSet.get(i).printSegment();
 			sweepLineStatus.treeDelete(sweepLineStatus.treeSearch(cSet.get(i)));
 		}
+		// Insert segments from uSet and cSet in tree
 		for(int i = 0; i<uSet.size(); i++)
 		{	
 			Segment segment = uSet.get(i);
@@ -140,18 +142,142 @@ public class FindIntersections {
 			treeInsertBlock(segment);
 		}
 		
-		sweepLineStatus.inOrderWalk();
+//		System.out.println("All nodes");
+//		try {
+//			for (int i=0; i<sweepLineStatus.allNodes().size() ; i++)
+//			{
+//				System.out.println(((Segment) sweepLineStatus.allNodes().get(i).getKey()).toString());
+//			}
+//		} catch (NullPointerException ex){}
+		
 		if(uSet.size() + cSet.size() == 0)
 		{
+			// Find sl and sr, left and right segments neighbors of evtPoint in tree
+			System.out.println("---CASE 9---");
+			boolean token = true;
+			int i = 0;
+			try {
+				while(token && i<sweepLineStatus.allNodes().size()){
+					Segment currSeg = ((Segment) sweepLineStatus.allNodes().get(i).getKey());
+					if (currSeg.isLeft(evtPoint) == -1)
+					{
+						System.out.println("LEFT from p = " + evtPoint+" is "+currSeg.toString());
+						token = false;
+						i--;
+					}
+					i++;
+				}
+			} catch (NullPointerException ex){}
+			if(token == false)
+			{
+				try {
+					Segment sr = ((Segment) sweepLineStatus.allNodes().get(i-1).getKey());
+					Segment sl = ((Segment) sweepLineStatus.allNodes().get(i).getKey());
+					System.out.println("token == true | sl = "+sl.toString()+"| sr = "+sr.toString());
+					
+					System.out.println("**********First*****");
+
+					FindNewEvent(sl, sr, evtPoint);
 			
+				} catch (ArrayIndexOutOfBoundsException ex) {}
+			}
 		} else {
+			System.out.println("---CASE 11---");
+			ArrayList<Segment> unionSet = new ArrayList<Segment>();
+			unionSet.addAll(uSet);
+			unionSet.addAll(cSet);
 			
+			Segment sPrime = unionSet.get(0);
+
+			// find the leftmost segment in unionSet :
+			for(int i = 1; i<unionSet.size(); i++)
+			{
+				if(unionSet.get(i).getCurrentAbscisse(evtPoint.y) < sPrime.getCurrentAbscisse(evtPoint.y))
+				{
+					sPrime = unionSet.get(i);
+				}
+			}
+			System.out.println("leftmost seg of u(p)Uc(p) (size = "+unionSet.size()+") = "+sPrime.toString());
+			
+			// find left neighbor of sPrime in tree :
+			boolean token = true;
+			int i = 0;
+			try {
+				while(token && i<sweepLineStatus.allNodes().size()){
+					Segment currSeg = ((Segment) sweepLineStatus.allNodes().get(i).getKey());
+					if (currSeg.equals(sPrime))
+					{
+						token = false;
+						i--;
+					}
+					i++;
+				}
+			} catch (NullPointerException ex){}
+			if(token == false)
+			{
+				try {
+					Segment sl = ((Segment) sweepLineStatus.allNodes().get(i+1).getKey());
+					System.out.println("Left Neighbor of sPrime | sl = "+sl.toString());
+					
+					System.out.println("**********Prime*****");
+					FindNewEvent(sl, sPrime, evtPoint);
+			
+				} catch (ArrayIndexOutOfBoundsException ex) {}
+			}
+			
+			Segment sSecond = unionSet.get(0);
+			// find the rightmost segment in unionSet :
+			for(int j = 1; j<unionSet.size(); j++)
+			{
+				if(unionSet.get(j).getCurrentAbscisse(evtPoint.y) > sSecond.getCurrentAbscisse(evtPoint.y))
+				{
+					sSecond = unionSet.get(j);
+				}
+			}
+			System.out.println("rightmost seg of u(p)Uc(p) (size = "+unionSet.size()+") = "+sSecond.toString());
+			
+			// find right neighbor of sSecond in tree :
+			token = true;
+			i = 0;
+			try {
+				while(token && i<sweepLineStatus.allNodes().size()){
+					Segment currSeg = ((Segment) sweepLineStatus.allNodes().get(i).getKey());
+					if (currSeg.equals(sSecond))
+					{
+						token = false;
+						i--;
+					}
+					i++;
+				}
+			} catch (NullPointerException ex){}
+			if(token == false)
+			{
+				try {
+					Segment sr = ((Segment) sweepLineStatus.allNodes().get(i-1).getKey());
+					System.out.println("Right Neighbor of sSecond | sr = "+sr.toString());
+					System.out.println("**********Second*****");
+					FindNewEvent(sSecond, sr, evtPoint);
+			
+				} catch (ArrayIndexOutOfBoundsException ex) {}
+			}
 		}
 	}
 	
 	public void FindNewEvent(Segment sl, Segment sr, Point2D.Float p)
 	{
-		
+//		System.out.println("CANDIDATE");
+
+		Point2D.Float inter = inter2Segments(sl, sr);
+		if ( inter != null && (inter.y < p.y || (Math.abs(inter.y - p.y) <= 1.000001E-002F && inter.x > p.x)))
+				{
+					System.out.println("Should be intersection : "+inter);
+			
+					EventPointSegment newPoint = new EventPointSegment(inter);
+					if(!queue.contains(newPoint))
+					{
+						queue.add(newPoint);
+					}
+				}
 	}
 	
 	public ArrayList<Segment> SegmentsContainingEventPoint(RedBlackTree redblacktree, EventPointSegment evtPointSeg)
@@ -171,9 +297,9 @@ public class FindIntersections {
             if(segment.containsPoint(evtPointSeg.getPoint()))
             {
 //            	evtPointSeg.printEventPoint();
-//            	System.out.println("===");
-//            	segment.printSegment();
-//            	System.out.println("Segment contains point");
+            	System.out.println("===");
+            	segment.printSegment();
+            	System.out.println("Segment contains point");
 //                eventpoint.addIntersectionSegment(segment);
             	
             	result.add(segment);
@@ -208,5 +334,61 @@ public class FindIntersections {
 	public DrawArea getDrawArea() {
         return this.drawArea;
     }
+	
+	public static Point2D.Float inter2Segments(Segment s1, Segment s2)
+	{
+		Point2D.Float A = s1.getLowerEndpoint();
+		Point2D.Float B = s1.getUpperEndpoint();
+		Point2D.Float C = s2.getLowerEndpoint();
+		Point2D.Float D = s2.getUpperEndpoint();
+		
+		float Ax = A.x;
+		float Ay = A.y;
+		float Bx = B.x;
+		float By = B.y;
+		float Cx = C.x;
+		float Cy = C.y;
+		float Dx = D.x;
+		float Dy = D.y;
+		
+		double Sx;
+		double Sy;
+ 
+		if(Ax==Bx)
+		{
+			if(Cx==Dx) return null;
+			else
+			{
+				double pCD = (Cy-Dy)/(Cx-Dx);
+				Sx = Ax;
+				Sy = pCD*(Ax-Cx)+Cy;
+			}
+		}
+		else
+		{
+			if(Cx==Dx)
+			{
+				double pAB = (Ay-By)/(Ax-Bx);
+				Sx = Cx;
+				Sy = pAB*(Cx-Ax)+Ay;
+			}
+			else
+			{
+				double pCD = (Cy-Dy)/(Cx-Dx);
+				double pAB = (Ay-By)/(Ax-Bx);
+				double oCD = Cy-pCD*Cx;
+				double oAB = Ay-pAB*Ax;
+				Sx = (oAB-oCD)/(pCD-pAB);
+				Sy = pCD*Sx+oCD;
+			}
+		}
+		if((Sx<Ax && Sx<Bx)|(Sx>Ax && Sx>Bx) | (Sx<Cx && Sx<Dx)|(Sx>Cx && Sx>Dx)
+				| (Sy<Ay && Sy<By)|(Sy>Ay && Sy>By) | (Sy<Cy && Sy<Dy)|(Sy>Cy && Sy>Dy))
+			{
+				return null;
+			} else {
+				return new Point2D.Float((float)Sx,(float)Sy);
+			}
+	}
     
 }

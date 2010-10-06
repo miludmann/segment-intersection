@@ -345,13 +345,17 @@ public class DrawArea extends JPanel implements MouseListener,
 			        float[] xSegment = ((Segment) currentShape).getXpoints();
 			        float[] ySegment = ((Segment) currentShape).getYpoints();
 
-			        System.out.printf("New Segment start : "+xSegment[0]+" "+ySegment[0]+"\n");
-			        System.out.printf("New Segment end : "+xSegment[1]+" "+ySegment[1]+"\n\n");
+			        float[] pointSegmentStart = {xSegment[0], ySegment[0]};
+			        float[] pointSegmentEnd = {xSegment[1], ySegment[1]};
+			        loadSegment(pointSegmentStart, pointSegmentEnd);
 			        
-			        currentShape.setSkin(new Skin(currentSkin));
-			        MainWindow.root.addNode(currentShape);
-			        redrawAll();
-			        nbSegments++;
+//			        System.out.printf("New Segment start : "+xSegment[0]+" "+ySegment[0]+"\n");
+//			        System.out.printf("New Segment end : "+xSegment[1]+" "+ySegment[1]+"\n\n");
+//			        
+//			        currentShape.setSkin(new Skin(currentSkin));
+//			        MainWindow.root.addNode(currentShape);
+//			        redrawAll();
+//			        nbSegments++;
 				}
 			}
 		}	
@@ -360,6 +364,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	
 	public void loadSegment(float[] pointSegmentStart, float[] pointSegmentEnd)
 	{
+        points.clear();
 		System.out.println("DEBUG "+pointSegmentStart[0]+" "+pointSegmentEnd[0]+" "+pointSegmentStart[1]+" "+pointSegmentEnd[1]);
 		points.add(pointSegmentStart);
 		points.add(pointSegmentEnd);

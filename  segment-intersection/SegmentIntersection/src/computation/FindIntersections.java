@@ -73,7 +73,7 @@ public class FindIntersections {
 		ArrayList<Segment> evtSet = evtPointSeg.getSegments();	
 		
 		ArrayList<Segment> uSet = new ArrayList<Segment>();	
-		ArrayList<Segment> lpSet = new ArrayList<Segment>();	
+		ArrayList<Segment> lcSet = new ArrayList<Segment>();	
 		ArrayList<Segment> lSet = new ArrayList<Segment>();	
 		ArrayList<Segment> cSet = new ArrayList<Segment>();	
 
@@ -85,7 +85,7 @@ public class FindIntersections {
 		{
 			for(int i=0; i<evtSet.size(); i++)
 			{
-				if(evtSet.get(i).getUpperEndpoint() == evtPoint)
+				if(evtSet.get(i).getUpperEndpoint().equals(evtPoint))
 				{
 					uSet.add(evtSet.get(i));
 				}
@@ -93,18 +93,18 @@ public class FindIntersections {
 		}
 		
 		// Find all segments stored in the tree that contain evtPoint
-		lpSet = SegmentsContainingEventPoint(sweepLineStatus, evtPointSeg);
-		for(int i = 0; i<lpSet.size(); i++)
+		lcSet = SegmentsContainingEventPoint(sweepLineStatus, evtPointSeg);
+		for(int i = 0; i<lcSet.size(); i++)
 		{
-//			System.out.println(lpSet.toString());
-			if(lpSet.get(i).getLowerEndpoint().equals(evtPoint))
+			System.out.println("SIZE lUc set: "+lcSet.size()+" "+lcSet.toString());
+			if(lcSet.get(i).getLowerEndpoint().equals(evtPoint))
 			{
 				// Set of segments whose lowerEndpoint is evtPoint
 //				System.out.println("Curr evt pt is lowerpoint of : "+lpSet.get(i).toString());
-				lSet.add(lpSet.get(i));
+				lSet.add(lcSet.get(i));
 			} else {
 				// Set of segments who contain evtPoint in their interior
-				cSet.add(lpSet.get(i));
+				cSet.add(lcSet.get(i));
 			}
 		}
 		
@@ -128,19 +128,72 @@ public class FindIntersections {
 			cSet.get(i).printSegment();
 			sweepLineStatus.treeDelete(sweepLineStatus.treeSearch(cSet.get(i)));
 		}
+		
+		// Make sure the segments in the tree are in good order (order of intersection with the sweep line just below the event point)
+		float minVal = -1;
+
+		try {
+			for(int i = 0; i<sweepLineStatus.allNodes().size() ; i++)
+			{
+				Segment segment = ((Segment) sweepLineStatus.allNodes().get(i).getKey());
+				if (segment.getValue() < minVal || minVal == -1)
+				{
+					minVal = segment.getValue();
+				}
+				sweepLineStatus.treeDelete(sweepLineStatus.treeSearch(segment));
+				if(segment.isHorizontal())
+				{
+					segment.updateValue(minVal + 0.0002F);
+				} else {
+					segment.updateValue(evtPoint.y - 0.02F);
+				}
+				treeInsertBlock(segment);
+				
+				
+			}
+		} catch (NullPointerException ex){}
+		
 		// Insert segments from uSet and cSet in tree
+		Segment horizontalSegment = null;
+		System.out.println("uSet size = "+uSet.size()+" ; cSet size = "+cSet.size());
 		for(int i = 0; i<uSet.size(); i++)
 		{	
 			Segment segment = uSet.get(i);
 			segment.updateValue(evtPoint.y - 0.02F);
-			treeInsertBlock(segment);
+			if (segment.getValue() < minVal || minVal == -1)
+			{
+				minVal = segment.getValue();
+			}
+			if(segment.isHorizontal())
+			{
+				horizontalSegment = segment;
+			} else {
+				treeInsertBlock(segment);
+			}
 		}
 		for(int i = 0; i<cSet.size(); i++)
 		{
 			Segment segment = cSet.get(i);
 			segment.updateValue(evtPoint.y - 0.02F);
-			treeInsertBlock(segment);
+			if (segment.getValue() < minVal || minVal == -1)
+			{
+				minVal = segment.getValue();
+			}
+			if(segment.isHorizontal())
+			{
+				horizontalSegment = segment;
+			} else {
+				treeInsertBlock(segment);
+			}	
 		}
+		if(horizontalSegment != null)
+		{
+			System.out.println(">>>>>>>>>>Horizontal");
+			horizontalSegment.updateValue(minVal + 0.0002F);
+			treeInsertBlock(horizontalSegment);
+		}
+		System.out.println(">>>>>>>>>>End insert");
+
 		
 //		System.out.println("All nodes");
 //		try {
@@ -153,7 +206,7 @@ public class FindIntersections {
 		if(uSet.size() + cSet.size() == 0)
 		{
 			// Find sl and sr, left and right segments neighbors of evtPoint in tree
-			System.out.println("---CASE 9---");
+//			System.out.println("---CASE 9---");
 			boolean token = true;
 			int i = 0;
 			try {
@@ -175,14 +228,12 @@ public class FindIntersections {
 					Segment sl = ((Segment) sweepLineStatus.allNodes().get(i).getKey());
 					System.out.println("token == true | sl = "+sl.toString()+"| sr = "+sr.toString());
 					
-					System.out.println("**********First*****");
-
 					FindNewEvent(sl, sr, evtPoint);
 			
 				} catch (ArrayIndexOutOfBoundsException ex) {}
 			}
 		} else {
-			System.out.println("---CASE 11---");
+//			System.out.println("---CASE 11---");
 			ArrayList<Segment> unionSet = new ArrayList<Segment>();
 			unionSet.addAll(uSet);
 			unionSet.addAll(cSet);
@@ -192,7 +243,7 @@ public class FindIntersections {
 			// find the leftmost segment in unionSet :
 			for(int i = 1; i<unionSet.size(); i++)
 			{
-				if(unionSet.get(i).getCurrentAbscisse(evtPoint.y) < sPrime.getCurrentAbscisse(evtPoint.y))
+				if(unionSet.get(i).getValue() < sPrime.getValue())
 				{
 					sPrime = unionSet.get(i);
 				}
@@ -218,8 +269,6 @@ public class FindIntersections {
 				try {
 					Segment sl = ((Segment) sweepLineStatus.allNodes().get(i+1).getKey());
 					System.out.println("Left Neighbor of sPrime | sl = "+sl.toString());
-					
-					System.out.println("**********Prime*****");
 					FindNewEvent(sl, sPrime, evtPoint);
 			
 				} catch (ArrayIndexOutOfBoundsException ex) {}
@@ -229,7 +278,7 @@ public class FindIntersections {
 			// find the rightmost segment in unionSet :
 			for(int j = 1; j<unionSet.size(); j++)
 			{
-				if(unionSet.get(j).getCurrentAbscisse(evtPoint.y) > sSecond.getCurrentAbscisse(evtPoint.y))
+				if(unionSet.get(j).getValue() > sSecond.getValue())
 				{
 					sSecond = unionSet.get(j);
 				}
@@ -253,9 +302,11 @@ public class FindIntersections {
 			if(token == false)
 			{
 				try {
+					
+//					Segment sr2 = (Segment) sSecond.getNode().getNext().getKey();
+//					System.out.println("Right Neighbor of sSecond | sr = "+sr2.toString());
 					Segment sr = ((Segment) sweepLineStatus.allNodes().get(i-1).getKey());
 					System.out.println("Right Neighbor of sSecond | sr = "+sr.toString());
-					System.out.println("**********Second*****");
 					FindNewEvent(sSecond, sr, evtPoint);
 			
 				} catch (ArrayIndexOutOfBoundsException ex) {}
@@ -297,9 +348,10 @@ public class FindIntersections {
             if(segment.containsPoint(evtPointSeg.getPoint()))
             {
 //            	evtPointSeg.printEventPoint();
-            	System.out.println("===");
+            	System.out.println("===ContainingEvtPoints===");
             	segment.printSegment();
             	System.out.println("Segment contains point");
+            	System.out.println("==========================");
 //                eventpoint.addIntersectionSegment(segment);
             	
             	result.add(segment);
@@ -310,7 +362,8 @@ public class FindIntersections {
 
     public void treeInsertBlock(Segment segment)
     {
-//    	System.out.println("Insert in tree");
+    	System.out.println("Insert in tree :");
+    	segment.printSegment();
         RedBlackNode redblacknode = new RedBlackNode(segment);
         if(sweepLineStatus.treeContains(redblacknode))
         {
@@ -318,15 +371,21 @@ public class FindIntersections {
             return;
         }
         float d = 0.0F;
+//        sweepLineStatus.treeInsert(redblacknode);
+        if (segment.isVertical())
+        {
+        	sweepLineStatus.treeInsert(redblacknode);
+        	return;
+        }
         do
         {
-            segment.setValue(segment.getValue() + d);
+            segment.setValue(segment.getValue() - d);
             if(sweepLineStatus.treeInsert(redblacknode))
                 break;
-            segment.setValue(segment.getValue() - 2F * d);
+            segment.setValue(segment.getValue() + 2F * d);
             if(sweepLineStatus.treeInsert(redblacknode))
                 break;
-            segment.setValue(segment.getValue() + d);
+            segment.setValue(segment.getValue() - d);
             d += 0.5F;
         } while(true);
     }

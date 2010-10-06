@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import components.DrawArea;
 
+import sceneGraph.Intersection;
 import sceneGraph.Segment;
 
 /**
@@ -112,7 +113,12 @@ public class FindIntersections {
 		if(uSet.size() + lSet.size() + cSet.size() > 1)
 		{
 			evtPointSeg.isIntersection();
-			getDrawArea().createIntersection(evtPoint.x, evtPoint.y);
+			Intersection newIntersection = getDrawArea().createIntersection(evtPoint.x, evtPoint.y);			
+			ArrayList<Segment> segments = new ArrayList<Segment>();
+			segments.addAll(uSet);
+			segments.addAll(lSet);
+			segments.addAll(cSet);
+			newIntersection.setSegments(segments);
 		}
 		
 		// Delete segments lSet and cSet from tree

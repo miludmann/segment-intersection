@@ -138,7 +138,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-            	getDrawArea().setTypeDessin(TypeAction.DESSIN);
+            	getDrawArea().setDrawingType(TypeAction.DESSIN);
             	getDrawArea().setCaracFormeCourante((CaracForme) listeFormes.getSelectedItem());
         		stateChanged(null);
             }
@@ -206,7 +206,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	 * @param typeDessin
 	 */
 	public void setTypeDessin(TypeAction typeDessin) {
-		drawArea.setTypeDessin(typeDessin);
+		drawArea.setDrawingType(typeDessin);
 	}
 
 
@@ -259,7 +259,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	
 
 	public void addShape(CaracForme caracForme) {	
-		drawArea.setTypeDessin(TypeAction.DESSIN);
+		drawArea.setDrawingType(TypeAction.DESSIN);
 		
 		listeFormes.removeAllItems();
 		switch (caracForme) {

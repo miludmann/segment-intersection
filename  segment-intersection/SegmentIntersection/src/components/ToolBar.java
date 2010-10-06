@@ -39,6 +39,8 @@ public class ToolBar extends JToolBar
     private JButton refaire = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/refaire.png")));
     private JButton supprimer = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
     private JButton findInter = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/find_inter.png")));
+    private JButton findDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
+    
 
 
     
@@ -54,6 +56,8 @@ public class ToolBar extends JToolBar
         refaire.addActionListener(new ActionManager(ActionToPerform.REDO, optionsArea));
         supprimer.addActionListener(new ActionManager(ActionToPerform.DELETE, optionsArea));
         findInter.addActionListener(new ActionManager(ActionToPerform.FIND_INTER, optionsArea));
+        findDCEL.addActionListener(new ActionManager(ActionToPerform.FIND_DCEL, optionsArea));
+        
 
         
         segment.setToolTipText("Draw segment");
@@ -63,6 +67,7 @@ public class ToolBar extends JToolBar
         refaire.setToolTipText("Redo");
         supprimer.setToolTipText("Delete");
         findInter.setToolTipText("Find Intersections");
+        findDCEL.setToolTipText("Find Intersections");
 
         
         this.setLayout(new GridLayout(1, 0));
@@ -81,7 +86,8 @@ public class ToolBar extends JToolBar
         this.add(findInter);
         
         this.addSeparator();
-
+        
+        this.add(findDCEL);
         this.add(segment);
             
         this.setBorder(BorderFactory.createEtchedBorder());

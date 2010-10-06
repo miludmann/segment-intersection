@@ -343,6 +343,12 @@ public class OptionsArea extends JPanel implements ChangeListener {
 		fi = new FindIntersections(getDrawArea(), getDrawArea().getSceneGraphArea().getSegments());		
 	}
 
+	public void findDCEL() {
+        System.out.println("test");
+	}
 
+	
+	
+	
 }
 	

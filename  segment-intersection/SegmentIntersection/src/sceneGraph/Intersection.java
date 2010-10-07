@@ -1,5 +1,6 @@
 package sceneGraph;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -67,6 +68,10 @@ public class Intersection extends Ellipse {
 		return "Intersection : {"+this.x+", "+this.y+"}";
 	}
 	
+	public void printIntersection()
+	{
+		System.out.println("Intersection : "+this.x+" ; "+this.y);
+	}	
 	/**
 	 * Set the list of segments that are part of the intersection
 	 * @param list
@@ -79,5 +84,13 @@ public class Intersection extends Ellipse {
 	public ArrayList<Segment> getSegments()
 	{
 		return this.segments;
+	}
+	
+	public Point2D getPoint(){
+		Point2D res = null;
+		res = new Point2D.Float();
+		res.setLocation((double) this.x, (double) this.y);
+		
+		return res;
 	}
 }

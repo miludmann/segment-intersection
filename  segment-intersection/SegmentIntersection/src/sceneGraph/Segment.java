@@ -34,6 +34,9 @@ public class Segment extends Shape implements Key{
 	private boolean isVertical = false;
 	private boolean isHorizontal = false;
 	protected float ERROR_ALLOWED = 1.0001E-002F;
+	private ArrayList<Point2D> split;
+
+	
 
 	public Segment() {
 		segment = new java.awt.Polygon();
@@ -45,6 +48,7 @@ public class Segment extends Shape implements Key{
 		leftEndpoint = new Point2D.Float();
 		value = -1;
 		id = -1;
+		setSplit(new ArrayList<Point2D>());
 	}
 	
 	public Segment(float[] xpoints, float[] ypoints, int npoints) {
@@ -356,4 +360,38 @@ public class Segment extends Shape implements Key{
         setValue(key.getValue());
         key.setValue(d);		
 	}
+
+	public void setSplit(ArrayList<Point2D> split) {
+		this.split = split;
+	}
+
+	public ArrayList<Point2D> getSplit() {
+		return split;
+	}
+
+	public void initSplitSegment(){
+		this.split.clear();
+		
+		if(this.isHorizontal){
+			this.split.add(this.rightEndpoint);
+			this.split.add(this.leftEndpoint);
+		}
+		else{
+			this.split.add(this.lowerEndpoint);
+			this.split.add(this.upperEndpoint);
+		}
+	}
+	
+	public void addSplit(Point2D p){
+
+		int nbPoints = this.split.size();
+
+		for(int i=0; i< (nbPoints-1); i++){
+			if ( split.get(i).distance(p) < split.get(i).distance(split.get(i+1))
+					&& split.get(i+1).distance(p) < split.get(i).distance(split.get(i+1)) ){
+				this.split.add(i+1, p);
+			}
+		}
+	}
+
 }

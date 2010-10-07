@@ -234,6 +234,24 @@ public class SceneGraphArea extends JPanel {
         return segments;
 	}
 	
+	public ArrayList<Intersection> getIntersections(){
+		int nbItems = ((DefaultTreeModel) tree.getModel()).getChildCount(MainWindow.root);
+		ArrayList<Intersection> intersections = new ArrayList<Intersection>();
+        
+        int i=0, j=0;
+        while(i<nbItems)
+        {
+        	if(((DefaultTreeModel) tree.getModel()).getChild(MainWindow.root, i).getClass() == Intersection.class){
+        		intersections.add((Intersection) ((DefaultTreeModel) tree.getModel()).getChild(MainWindow.root, i));
+        		j++;
+        	}
+        	i++;
+        }
+        return intersections;
+	}
+	
+	
+	
 	public void removeIntersections(){
 		int nbItems = ((DefaultTreeModel) tree.getModel()).getChildCount(MainWindow.root);
         

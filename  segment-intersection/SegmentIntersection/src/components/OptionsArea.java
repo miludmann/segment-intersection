@@ -36,6 +36,7 @@ import javax.swing.event.ChangeListener;
 
 import components.DrawArea.CaracForme;
 import components.DrawArea.TypeAction;
+import computation.FindDCEL;
 import computation.FindIntersections;
 
 
@@ -344,11 +345,10 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	}
 
 	public void findDCEL() {
-        System.out.println("test");
+		findIntersections();
+		FindDCEL fd ;
+		fd = new FindDCEL(getDrawArea().getSceneGraphArea().getSegments(), getDrawArea().getSceneGraphArea().getIntersections());
 	}
-
-	
-	
 	
 }
 	

@@ -321,7 +321,10 @@ public class FindDCEL {
 		}
 		*/
 		
-		dcel.printDCEL();
 		dcel.colorDCEL(dcel.getFaceList());
+	}
+	
+	public void printDCEL(){
+		this.dcel.printDCEL();
 	}
 }

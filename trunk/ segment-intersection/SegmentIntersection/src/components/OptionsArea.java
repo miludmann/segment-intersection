@@ -351,7 +351,10 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	}
 	
 	public void saveDCEL() {
-		System.out.println("Save DCEL");
+		findIntersections();
+		FindDCEL fd ;
+		fd = new FindDCEL(getDrawArea().getSceneGraphArea().getSegments(), getDrawArea().getSceneGraphArea().getIntersections(), getDrawArea());
+		fd.printDCEL();
 		return;
 	}
 	

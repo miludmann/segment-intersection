@@ -142,36 +142,62 @@ public class DCEL {
 		}
 	}
 	
-	public void colorDCEL(){
+	public void colorDCEL(ArrayList<Face> faceList){
 		
-		ArrayList<int[]> points = new ArrayList<int[]>();
-		Face faceTmp;
-		HalfEdge h0;
-		HalfEdge heTmp;
-		Point2D pTmp;
-		int nbFaces = this.getFaceList().size();
-		
-		
-		for(int j=0; j<(nbFaces-1); j++){
+		ArrayList<Face> newFaces = new ArrayList<Face>();
+		newFaces = (ArrayList<Face>) faceList.clone();
 
-			points.clear();
-			faceTmp = this.getFaceList().get(j);
-			h0 = faceTmp.getOuterComponent();
-			heTmp = h0;
-			
-			do{
-				pTmp = heTmp.getOrigin().getP();
-				int[] point = new int[] { (int) pTmp.getX(), (int) pTmp.getY() };
-				points.add(point);
-				heTmp = heTmp.getNext();
-			}
-			while ( !(h0.equals(heTmp)) );
-					
-			drawArea.drawPolygon(points);
-		}
+		int nbFaces, index;
+		nbFaces = newFaces.size(); 
+		newFaces.remove(nbFaces-1);
 		
+		Face faceTmp;
+	
+		while ( newFaces.size() > 0 ){
+		
+			faceTmp = newFaces.get(0);
+			index = 0;
+			nbFaces = newFaces.size(); 
+			
+			for(int j=0; j<nbFaces; j++){
+				if ( newFaces.get(j).getOuterHalfEdge().getOrigin().getP().getX() < faceTmp.getOuterHalfEdge().getOrigin().getP().getX() ){
+					faceTmp = newFaces.get(j);
+					index = j;
+				}
+			}
+
+			colorDCEL(faceTmp);
+			newFaces.remove(index);
+		}
+
 		return;
 	}
+	
+	public void colorDCEL(Face face){
+		
+		Point2D pTmp;
+		HalfEdge heTmp;
+		HalfEdge h0;
+		ArrayList<int[]> points = new ArrayList<int[]>();
+		h0 = face.getOuterComponent();
+		heTmp = h0;
+
+		
+		do{
+			pTmp = heTmp.getOrigin().getP();
+			int[] point = new int[] { (int) pTmp.getX(), (int) pTmp.getY() };
+			points.add(point);
+			heTmp = heTmp.getNext();
+		}
+		while ( !(h0.equals(heTmp)) );
+		
+		
+				
+		drawArea.drawPolygon(points);
+		return;
+	}
+
+
 
 	public void setDrawArea(DrawArea drawArea) {
 		this.drawArea = drawArea;

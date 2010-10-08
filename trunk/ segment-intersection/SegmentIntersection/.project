@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>segmentGen</name>
+			<type>1</type>
+			<location>D:/Users/Parapampa/Documents/3A DK/Computational geometry/project1/segmentGen</location>
+		</link>
+	</linkedResources>
 </projectDescription>

@@ -33,14 +33,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 /**
  * <p>
- * <b>Zone du scène de graphe</b>
- * </p>
- * <p>
- * Classe gérant
- * <ul>
- * <li>le panneau d'affichage du graphe de scène</li>
- * <li>les clics droit dans ladite zone</li>
- * </ul>
  * 
  * @author Depoyant Guillaume & Ludmann Michaël
  */
@@ -96,17 +88,6 @@ public class SceneGraphArea extends JPanel {
      */
     public void reload() {
         ((DefaultTreeModel) tree.getModel()).reload();
-        
-        int nbSegments = ((DefaultTreeModel) tree.getModel()).getChildCount(MainWindow.root);
-        int i;
-        System.out.printf("Nb segments : "+nbSegments+"\n");
-        for (i=0; i<nbSegments; i++)
-        {
-//        	Segment segTmp = (Segment) ((DefaultTreeModel) tree.getModel()).getChild(MainWindow.root, i);
-//        	System.out.printf("Seg"+i+" = [{"+segTmp.getXpoints()[0]+"; "+segTmp.getYpoints()[0]+"}, {"+segTmp.getXpoints()[1]+"; "+segTmp.getYpoints()[1]+"}] ; ");
-        }
-        System.out.println();
-       
     }
     
     public void addMenus(final OptionsArea zoneOptions)

@@ -321,7 +321,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	              getDrawArea().loadSegment(pointSegmentStart, pointSegmentEnd);
 //	              System.out.println("x1 = "+x1+" y1 = "+y1+" x2 = "+x2+" y2 = "+y2);
               } else {
-            	  System.out.println("openFile : Need four (4) floating numbers per line in the file, found "+lineSplit.length+" instead.");
+//            	  System.out.println("openFile : Need four (4) floating numbers per line in the file, found "+lineSplit.length+" instead.");
               }
             }
 

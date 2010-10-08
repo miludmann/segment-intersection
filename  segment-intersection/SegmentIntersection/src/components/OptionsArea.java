@@ -304,7 +304,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
 
             // this statement reads the line from the file and print it to
               // the console.
-              System.out.println(line);
+//              System.out.println(line);
               lineSplit = line.split(" ");
               
               // look for four floating numbers/line this way : x1 y1 x2 y2
@@ -319,7 +319,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	              float[] pointSegmentEnd = {x2, y2}; 
 	              
 	              getDrawArea().loadSegment(pointSegmentStart, pointSegmentEnd);
-	              System.out.println("x1 = "+x1+" y1 = "+y1+" x2 = "+x2+" y2 = "+y2);
+//	              System.out.println("x1 = "+x1+" y1 = "+y1+" x2 = "+x2+" y2 = "+y2);
               } else {
             	  System.out.println("openFile : Need four (4) floating numbers per line in the file, found "+lineSplit.length+" instead.");
               }

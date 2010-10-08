@@ -353,7 +353,6 @@ public class DrawArea extends JPanel implements MouseListener,
 	public void loadSegment(float[] pointSegmentStart, float[] pointSegmentEnd)
 	{
         points.clear();
-		System.out.println("DEBUG "+pointSegmentStart[0]+" "+pointSegmentEnd[0]+" "+pointSegmentStart[1]+" "+pointSegmentEnd[1]);
 		points.add(pointSegmentStart);
 		points.add(pointSegmentEnd);
         currentShape = new Segment(points, nbSegments);

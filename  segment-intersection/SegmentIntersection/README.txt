@@ -11,7 +11,7 @@ README file  :
 
 - go on the URL : http://code.google.com/p/segment-intersection/
 	and "Downloads" for the full report
-		"Source" then "Browse" for the source code
+		"Source" then "Browse" for the source code (trunk/segment-intersection)
 -or use Subversion to check out a read-only working copy :
 	svn checkout http://segment-intersection.googlecode.com/svn/trunk/ segment-intersection-read-only
 	
@@ -26,7 +26,8 @@ How to run the project :
 ===============================================================================
 Implementation language :
 
-Java
+Java SE-1.6
+JDK Compiler compliance level 1.6
 
 ===============================================================================
 
@@ -37,9 +38,12 @@ Package java.util :
 	http://download.oracle.com/javase/1.4.2/docs/api/java/util/package-summary.html	
 Java AWT and Swing librairies:
 
-JDK Compiler compliance level : 1.6
-
 ===============================================================================
 Operating system used while developing software :
 
 Windows 7
+
+===============================================================================
+How to use the program itself :
+
+Please follow instructions in the report.

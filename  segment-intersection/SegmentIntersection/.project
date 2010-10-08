@@ -14,21 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/images/calc.png</name>
-			<type>1</type>
-			<location>C:/Users/Guillaume/Desktop/calc.png</location>
-		</link>
-		<link>
-			<name>src/images/refresh.png</name>
-			<type>1</type>
-			<location>C:/Users/Guillaume/Desktop/refresh.png</location>
-		</link>
-		<link>
-			<name>src/images/save.png</name>
-			<type>1</type>
-			<location>C:/Users/Guillaume/Desktop/save.png</location>
-		</link>
-	</linkedResources>
 </projectDescription>

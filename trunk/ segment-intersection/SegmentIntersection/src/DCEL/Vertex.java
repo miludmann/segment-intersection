@@ -4,10 +4,13 @@ import java.awt.geom.Point2D;
 
 public class Vertex {
 	private Point2D p;
+	private int id;
+	private HalfEdge halfEdge;
 	//private Edges edges;
 
-	public Vertex(Point2D p){
+	public Vertex(Point2D p, int id) {
 		this.setP(p);
+		this.setId(id);
 	}
 
 	public void setP(Point2D p) {
@@ -16,6 +19,64 @@ public class Vertex {
 
 	public Point2D getP() {
 		return p;
+	}
+	
+	public boolean pointIsVertex(Point2D p) {
+		return (p.distance(this.p) == 0);
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setHalfEdge(HalfEdge halfEdge) {
+		this.halfEdge = halfEdge;
+	}
+
+	public HalfEdge getHalfEdge() {
+		return halfEdge;
+	}
+	
+	public double getAngle(Vertex v1, Vertex v2){
+		double x, y, x1, x2, y1, y2;
+		
+		x = this.p.getX();
+		y = this.p.getY();
+
+		x1 = v1.getP().getX();
+		y1 = v1.getP().getY();
+		
+		x2 = v2.getP().getX();
+		y2 = v2.getP().getY();
+		/*
+		double a, b, c, cos;
+		
+		a = Math.sqrt((x1-x)*(x1-x)+(y1-y)*(y1-y));
+		b = Math.sqrt((x2-x)*(x2-x)+(y2-y)*(y2-y));
+		c = Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+		
+		cos = (a*a+b*b-c*c)/(2*a*b);
+		
+		return Math.acos(cos);
+		*/
+		double theta1, theta2, theta;
+		
+		theta1 = Math.atan2(x-x1, y-y1);
+		theta2 = Math.atan2(x-x2, y-y2);
+		theta = theta2 - theta1;
+		
+		while ( theta < 0 ){
+			theta = theta + 2*3.141592646952213;
+		}
+		while ( theta > 2*3.141592646952213 ){
+			theta = theta - 2*3.141592646952213;
+		}
+
+		return theta;
 	}
 	
 }

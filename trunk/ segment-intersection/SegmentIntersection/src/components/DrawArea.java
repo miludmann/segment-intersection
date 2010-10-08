@@ -376,9 +376,13 @@ public class DrawArea extends JPanel implements MouseListener,
 	
 	public void drawPolygon (ArrayList<int[]> points){
 		
+		int color1 = (int) Math.floor((Math.random()*255));
+		int color2 = (int) Math.floor((Math.random()*255));
+		int color3 = (int) Math.floor((Math.random()*255));
+		
 		currentShape = new Polygon( points);
 
-		currentShape.setSkin(new Skin(1, new Color(255,0,0), new Color(255, 0, 0)));
+		currentShape.setSkin(new Skin(1, new Color(color1,color2,color3), new Color(color1, color2, color3)));
         MainWindow.root.addNode(currentShape);
         
         redrawAll();

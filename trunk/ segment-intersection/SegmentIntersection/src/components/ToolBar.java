@@ -69,7 +69,7 @@ public class ToolBar extends JToolBar
         refaire.setToolTipText("Redo");
         supprimer.setToolTipText("Delete");
         findInter.setToolTipText("Find Intersections");
-        findDCEL.setToolTipText("Find Intersections");
+        findDCEL.setToolTipText("Find DCEL");
 
         
         this.setLayout(new GridLayout(1, 0));

@@ -40,6 +40,8 @@ public class ToolBar extends JToolBar
     private JButton supprimer = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
     private JButton findInter = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/find_inter.png")));
     private JButton findDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
+    private JButton saveDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
+    private JButton openDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
     
 
 

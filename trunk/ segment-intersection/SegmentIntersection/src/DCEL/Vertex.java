@@ -78,5 +78,18 @@ public class Vertex {
 
 		return theta;
 	}
+
+	public boolean crossHorizontal(HalfEdge heTmp) {
+		
+		Point2D p1, p2, p;
+		p1 = heTmp.getOrigin().getP();
+		p2 = heTmp.getTwin().getOrigin().getP();
+		p = this.getP();
+		
+		boolean isBetween = (p1.getY() > p.getY()) && (p.getY() > p2.getY()) || (p1.getY() < p.getY()) && (p.getY() < p2.getY());
+		boolean isAtLeft = (p.getX() > p1.getX()) || (p.getX() > p2.getX());
+		
+		return ( isBetween && isAtLeft );
+	}
 	
 }

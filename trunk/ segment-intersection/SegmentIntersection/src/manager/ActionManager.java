@@ -33,7 +33,8 @@ public class ActionManager implements ActionListener
 		NEW_SHEET, EXIT, ABOUT, UNDO, REDO,
 		ACK_DEL,DELETE,
 		DRAW_SEGMENT,
-		REDRAW_ALL, OPEN, FIND_INTER, FIND_DCEL;
+		REDRAW_ALL, OPEN, FIND_INTER,
+		FIND_DCEL, SAVE_DCEL, OPEN_DCEL;
 						
 		/**
 		 * Demande au Gestionnaire d'effectuer une action 
@@ -102,6 +103,13 @@ public class ActionManager implements ActionListener
 				am.getZone().findDCEL();
 				return;
 				
+			case SAVE_DCEL:
+				am.getZone().saveDCEL();
+				return;
+				
+			case OPEN_DCEL:
+				am.getZone().openDCEL();
+				return;
 			
 					
 			} throw new AssertionError("ActionToPerform::unknown assertion : " + this);

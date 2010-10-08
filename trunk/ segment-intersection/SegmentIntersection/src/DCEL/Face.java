@@ -98,10 +98,10 @@ public class Face {
 		
 		angle = v.getAngle(he.getNext().getOrigin(), he.getPrev().getOrigin());
 		
-		if ( angle == 0 || angle > 3.141592646952213 ){
+		if ( angle == 0 || angle > 3.141592646952213 )
 			this.setIsOuter(true);
-			this.setOuterHalfEdge(he);
-		}
+		this.setOuterHalfEdge(he);
+		
 	}
 
 }

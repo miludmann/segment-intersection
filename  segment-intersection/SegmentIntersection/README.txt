@@ -47,3 +47,8 @@ Windows 7
 How to use the program itself :
 
 Please follow instructions in the report.
+
+===============================================================================
+Creating test files :
+
+Just run the python script : python segmentGen

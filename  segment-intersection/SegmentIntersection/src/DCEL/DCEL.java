@@ -149,20 +149,26 @@ public class DCEL {
 		HalfEdge h0;
 		HalfEdge heTmp;
 		Point2D pTmp;
+		int nbFaces = this.getFaceList().size();
 		
-		faceTmp = this.getFaceList().get(0);
-		h0 = faceTmp.getOuterComponent();
-		heTmp = h0;
 		
-		do{
-			pTmp = heTmp.getOrigin().getP();
-			int[] point = new int[] { (int) pTmp.getX(), (int) pTmp.getY() };
-			points.add(point);
-			heTmp = heTmp.getNext();
+		for(int j=0; j<(nbFaces-1); j++){
+
+			points.clear();
+			faceTmp = this.getFaceList().get(j);
+			h0 = faceTmp.getOuterComponent();
+			heTmp = h0;
+			
+			do{
+				pTmp = heTmp.getOrigin().getP();
+				int[] point = new int[] { (int) pTmp.getX(), (int) pTmp.getY() };
+				points.add(point);
+				heTmp = heTmp.getNext();
+			}
+			while ( !(h0.equals(heTmp)) );
+					
+			drawArea.drawPolygon(points);
 		}
-		while ( !(h0.equals(heTmp)) );
-				
-		drawArea.drawPolygon(points);
 		
 		return;
 	}

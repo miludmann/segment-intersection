@@ -51,4 +51,4 @@ Please follow instructions in the report.
 ===============================================================================
 Creating test files :
 
-Just run the python script : python segmentGen
+Just run the python script : python segmentGen.py

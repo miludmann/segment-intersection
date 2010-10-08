@@ -183,20 +183,42 @@ public class FindDCEL {
 		}
 		
 		// Check Half Edge List with Faces label
+		/*
 		nbHalfEdges = dcel.getHalfEdgeList().size();
 		for(int j=0; j<nbHalfEdges; j++){
 			heTmp = dcel.getHalfEdgeList().get(j);
 			System.out.println("id:"+heTmp.getId()+"_face:"+heTmp.getFace().getId()+"_prev:"+heTmp.getPrev().getId()+"_next:"+heTmp.getNext().getId());
 		}
-		
+		*/
 		int nbFaces = dcel.getFaceList().size();
 		Face faceTmp;
 		
 		for(int j=0; j<nbFaces; j++){
 			faceTmp = dcel.getFaceList().get(j);
-			System.out.println("id:"+faceTmp.getId()+"_innerComponent:"+faceTmp.getInnerComponent().getId());
+			faceTmp.analyseFace();
+
+			//System.out.println("id:"+faceTmp.getId()+"_innerComponent:"+faceTmp.getInnerComponent().getId()+"_outer:"+faceTmp.getIsOuter());
 		}
 		
-		System.out.println("Nombre de faces : "+dcel.getFaceList().size());
+		//System.out.println("Nombre de faces : "+dcel.getFaceList().size());
+		
+		
+		
+		// Split inner and outer
+		
+		ArrayList<Face> outerFace = new ArrayList<Face>();
+		nbFaces = dcel.getFaceList().size();
+
+		for(int j=0; j<nbFaces; j++){
+			faceTmp = dcel.getFaceList().get(j);
+			
+			if ( faceTmp.getIsOuter() ){
+				outerFace.add(faceTmp);
+				dcel.getFaceList().remove(faceTmp);
+				nbFaces = dcel.getFaceList().size();
+			}
+		}
+		
+		System.out.println("Inner : "+dcel.getFaceList().size()+" - Outer : "+outerFace.size());
 	}
 }

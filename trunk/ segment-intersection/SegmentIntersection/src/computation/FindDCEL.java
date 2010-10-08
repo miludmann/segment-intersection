@@ -2,6 +2,8 @@ package computation;
 
 import java.util.ArrayList;
 
+import components.DrawArea;
+
 import DCEL.DCEL;
 import DCEL.Face;
 import DCEL.HalfEdge;
@@ -11,13 +13,15 @@ import sceneGraph.Intersection;
 import sceneGraph.Segment;
 
 public class FindDCEL {
-	DCEL dcel;
+	private DCEL dcel;
+	private DrawArea drawArea;
 
 	
-	public FindDCEL(ArrayList<Segment> segments, ArrayList<Intersection> intersections){
+	public FindDCEL(ArrayList<Segment> segments, ArrayList<Intersection> intersections, DrawArea drawArea){
 
 		// Initialize DCEL
-		dcel = new DCEL();
+		dcel = new DCEL(drawArea);
+		this.drawArea = drawArea;
 		
 		int nbIntersections = intersections.size();
 		int nbSegments;
@@ -318,5 +322,6 @@ public class FindDCEL {
 		*/
 		
 		dcel.printDCEL();
+		dcel.colorDCEL();
 	}
 }

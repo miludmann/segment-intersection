@@ -2,16 +2,21 @@ package DCEL;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import components.DrawArea;
+
+
 
 public class DCEL {
 	private ArrayList<Vertex> vertexList;
 	private ArrayList<HalfEdge> halfEdgeList;
 	private ArrayList<Face> faceList;
+	private DrawArea drawArea;
 	
-	public DCEL(){
+	public DCEL(DrawArea drawArea){
 		this.setVertexList(new ArrayList<Vertex>());
 		this.setHalfEdgeList(new ArrayList<HalfEdge>());
 		this.setFaceList(new ArrayList<Face>());
+		this.drawArea = drawArea;
 	}
 
 	public void setVertexList(ArrayList<Vertex> vertexList) {
@@ -136,5 +141,37 @@ public class DCEL {
 			}
 		}
 	}
+	
+	public void colorDCEL(){
+		
+		ArrayList<int[]> points = new ArrayList<int[]>();
+		Face faceTmp;
+		HalfEdge h0;
+		HalfEdge heTmp;
+		Point2D pTmp;
+		
+		faceTmp = this.getFaceList().get(0);
+		h0 = faceTmp.getOuterComponent();
+		heTmp = h0;
+		
+		do{
+			pTmp = heTmp.getOrigin().getP();
+			int[] point = new int[] { (int) pTmp.getX(), (int) pTmp.getY() };
+			points.add(point);
+			heTmp = heTmp.getNext();
+		}
+		while ( !(h0.equals(heTmp)) );
+				
+		drawArea.drawPolygon(points);
+		
+		return;
+	}
 
+	public void setDrawArea(DrawArea drawArea) {
+		this.drawArea = drawArea;
+	}
+
+	public DrawArea getDrawArea() {
+		return drawArea;
+	}
 }

@@ -6,7 +6,9 @@ public class Face {
 	private int id;
 	private HalfEdge innerComponent;
 	private ArrayList<HalfEdge> outerComponent;
-	private int isOuter;
+	private boolean isOuter;
+	private Face outerFace;
+	private HalfEdge outerHalfEdge;
 	
 
 	public Face(HalfEdge inner, int id){
@@ -16,7 +18,7 @@ public class Face {
 	
 	public Face(int id){
 		this.setId(id);
-		this.setIsOuter(0);
+		this.setIsOuter(false);
 	}
 
 	public void setId(int id) {
@@ -48,12 +50,53 @@ public class Face {
 		return outerComponent;
 	}
 
-	public void setIsOuter(int isOuter) {
+	public void setIsOuter(boolean isOuter) {
 		this.isOuter = isOuter;
 	}
 
-	public int getIsOuter() {
+	public boolean getIsOuter() {
 		return isOuter;
 	}
+
+	public void setOuterFace(Face outerFace) {
+		this.outerFace = outerFace;
+	}
+
+	public Face getOuterFace() {
+		return outerFace;
+	}
+
+	public void setOuterHalfEdge(HalfEdge outerHalfEdge) {
+		this.outerHalfEdge = outerHalfEdge;
+	}
+
+	public HalfEdge getOuterHalfEdge() {
+		return outerHalfEdge;
+	}
 	
+	public void analyseFace(){
+		Vertex v;
+		HalfEdge he, heTmp;
+		double angle;
+		
+		heTmp = this.innerComponent.getNext();
+		he = this.innerComponent;
+		v = he.getOrigin();
+		
+		while ( !(heTmp.equals(this.innerComponent)) ){
+			if ( v.getP().getX() > heTmp.getOrigin().getP().getX() ){
+				he = heTmp;
+				v = he.getOrigin();
+			}
+			heTmp = heTmp.getNext();
+		}
+		
+		angle = v.getAngle(he.getNext().getOrigin(), he.getPrev().getOrigin());
+		
+		if ( angle == 0 || angle > 3.141592646952213 ){
+			this.setIsOuter(true);
+			this.setOuterHalfEdge(he);
+		}
+	}
+
 }

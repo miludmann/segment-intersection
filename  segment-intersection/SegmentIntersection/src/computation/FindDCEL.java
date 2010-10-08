@@ -49,7 +49,7 @@ public class FindDCEL {
 		
 		// Creation of Vertex List
 		for(int i=0; i<nbSegments; i++){
-			segments.get(i).printSegment();
+			//segments.get(i).printSegment();
 			//System.out.println(segments.get(i).getSplit().size());
 			
 			int nbSplit = segments.get(i).getSplit().size();
@@ -62,7 +62,7 @@ public class FindDCEL {
 		// Create Half Edge List
 		// Stores Vertex and Twin
 		// Links a Vertex to a Half Edge
-		System.out.println("===");
+		//System.out.println("===");
 		Vertex v1, v2;
 		HalfEdge h1, h2;
 

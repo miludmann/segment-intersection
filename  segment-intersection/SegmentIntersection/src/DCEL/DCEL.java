@@ -6,10 +6,12 @@ import java.util.ArrayList;
 public class DCEL {
 	private ArrayList<Vertex> vertexList;
 	private ArrayList<HalfEdge> halfEdgeList;
+	private ArrayList<Face> faceList;
 	
 	public DCEL(){
 		this.setVertexList(new ArrayList<Vertex>());
 		this.setHalfEdgeList(new ArrayList<HalfEdge>());
+		this.setFaceList(new ArrayList<Face>());
 	}
 
 	public void setVertexList(ArrayList<Vertex> vertexList) {
@@ -56,6 +58,18 @@ public class DCEL {
 
 	public ArrayList<HalfEdge> getHalfEdgeList() {
 		return halfEdgeList;
+	}
+	
+	public void addFaceList(Face face){
+		this.faceList.add(face);
+	}
+
+	public void setFaceList(ArrayList<Face> faceList) {
+		this.faceList = faceList;
+	}
+
+	public ArrayList<Face> getFaceList() {
+		return faceList;
 	}
 
 }

@@ -3,6 +3,7 @@ package computation;
 import java.util.ArrayList;
 
 import DCEL.DCEL;
+import DCEL.Face;
 import DCEL.HalfEdge;
 import DCEL.Vertex;
 
@@ -152,10 +153,50 @@ public class FindDCEL {
 		
 		
 		// Check Half Edge List
+		/*
 		nbHalfEdges = dcel.getHalfEdgeList().size();
 		for(int j=0; j<nbHalfEdges; j++){
 			heTmp = dcel.getHalfEdgeList().get(j);
 			System.out.println("id:"+heTmp.getId()+"_vertex:"+heTmp.getOrigin().getP().toString()+"_prev:"+heTmp.getPrev().getId()+"_next:"+heTmp.getNext().getId());
 		}
+		*/
+		
+		// Face part (rt+lm)
+		ArrayList<HalfEdge> HalfEdgesBis = (ArrayList<HalfEdge>) dcel.getHalfEdgeList().clone();
+		Face face;
+		
+		while ( HalfEdgesBis.size() > 0 ){
+			
+			he1 = HalfEdgesBis.get(0);
+			face = new Face(he1, dcel.getFaceList().size());
+			dcel.addFaceList(face);
+			
+			he1.setFace(face);
+			HalfEdgesBis.remove(he1);
+			heTmp = he1.getNext();
+			
+			while ( !(he1.equals(heTmp)) ){
+				heTmp.setFace(face);
+				HalfEdgesBis.remove(heTmp);
+				heTmp = heTmp.getNext();
+			}
+		}
+		
+		// Check Half Edge List with Faces label
+		nbHalfEdges = dcel.getHalfEdgeList().size();
+		for(int j=0; j<nbHalfEdges; j++){
+			heTmp = dcel.getHalfEdgeList().get(j);
+			System.out.println("id:"+heTmp.getId()+"_face:"+heTmp.getFace().getId()+"_prev:"+heTmp.getPrev().getId()+"_next:"+heTmp.getNext().getId());
+		}
+		
+		int nbFaces = dcel.getFaceList().size();
+		Face faceTmp;
+		
+		for(int j=0; j<nbFaces; j++){
+			faceTmp = dcel.getFaceList().get(j);
+			System.out.println("id:"+faceTmp.getId()+"_innerComponent:"+faceTmp.getInnerComponent().getId());
+		}
+		
+		System.out.println("Nombre de faces : "+dcel.getFaceList().size());
 	}
 }

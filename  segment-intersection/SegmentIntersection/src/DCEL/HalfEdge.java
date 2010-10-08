@@ -5,6 +5,7 @@ public class HalfEdge {
 	private HalfEdge next;
 	private HalfEdge prev;
 	private HalfEdge twin;
+	private Face face;
 	private int id;
 
 	
@@ -51,6 +52,14 @@ public class HalfEdge {
 
 	public int getId() {
 		return id;
+	}
+
+	public void setFace(Face face) {
+		this.face = face;
+	}
+
+	public Face getFace() {
+		return face;
 	}
 	
 }

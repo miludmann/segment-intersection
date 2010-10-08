@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Face {
 	private int id;
-	private HalfEdge innerComponent;
-	private ArrayList<HalfEdge> outerComponent;
+	private HalfEdge outerComponent;
+	private ArrayList<HalfEdge> innerComponent;
 	private boolean isOuter;
 	private Face outerFace;
 	private HalfEdge outerHalfEdge;
@@ -31,23 +31,23 @@ public class Face {
 	}
 
 
-	public void setInnerComponent(HalfEdge innerComponent) {
-		this.innerComponent = innerComponent;
-	}
-
-
-	public HalfEdge getInnerComponent() {
-		return innerComponent;
-	}
-
-
-	public void setOuterComponent(ArrayList<HalfEdge> outerComponent) {
+	public void setInnerComponent(HalfEdge outerComponent) {
 		this.outerComponent = outerComponent;
 	}
 
 
-	public ArrayList<HalfEdge> getOuterComponent() {
+	public HalfEdge getOuterComponent() {
 		return outerComponent;
+	}
+
+
+	public void setInnerComponent(ArrayList<HalfEdge> innerComponent) {
+		this.innerComponent = innerComponent;
+	}
+
+
+	public ArrayList<HalfEdge> getInnerComponent() {
+		return innerComponent;
 	}
 
 	public void setIsOuter(boolean isOuter) {
@@ -79,11 +79,11 @@ public class Face {
 		HalfEdge he, heTmp;
 		double angle;
 		
-		heTmp = this.innerComponent.getNext();
-		he = this.innerComponent;
+		heTmp = this.outerComponent.getNext();
+		he = this.outerComponent;
 		v = he.getOrigin();
 		
-		while ( !(heTmp.equals(this.innerComponent)) ){
+		while ( !(heTmp.equals(this.outerComponent)) ){
 			if ( v.getP().getX() > heTmp.getOrigin().getP().getX() ){
 				he = heTmp;
 				v = he.getOrigin();

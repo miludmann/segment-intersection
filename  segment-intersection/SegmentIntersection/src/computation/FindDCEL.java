@@ -197,17 +197,18 @@ public class FindDCEL {
 			faceTmp = dcel.getFaceList().get(j);
 			faceTmp.analyseFace();
 
-			//System.out.println("id:"+faceTmp.getId()+"_innerComponent:"+faceTmp.getInnerComponent().getId()+"_outer:"+faceTmp.getIsOuter());
+			//System.out.println("id:"+faceTmp.getId()+"_outerComponent:"+faceTmp.getOuterComponent().getId()+"_outer:"+faceTmp.getIsOuter());
 		}
 		
 		//System.out.println("Nombre de faces : "+dcel.getFaceList().size());
 		
 		
-		
 		// Split inner and outer
-		
 		ArrayList<Face> outerFace = new ArrayList<Face>();
 		nbFaces = dcel.getFaceList().size();
+		
+		Face f0 = new Face(null, nbFaces); // the infinite Face
+
 
 		for(int j=0; j<nbFaces; j++){
 			faceTmp = dcel.getFaceList().get(j);
@@ -220,5 +221,39 @@ public class FindDCEL {
 		}
 		
 		System.out.println("Inner : "+dcel.getFaceList().size()+" - Outer : "+outerFace.size());
+		System.out.println("===");
+		
+		// Fill the innerComponent in the Faces
+		int nbFacesIn = dcel.getFaceList().size();
+		int nbFacesOut = outerFace.size();
+		int nbEdgesCrossed;
+		
+		Face faceIn, faceOut;
+		Face faceRes = null;
+		int distRes = 0;
+
+		for(int i=0; i<nbFacesOut; i++){
+			faceOut = outerFace.get(i);
+			v1 = faceOut.getOuterHalfEdge().getOrigin();
+			nbEdgesCrossed = 0;
+			
+			for(int j=0; j<nbFacesIn; j++){
+				faceIn = dcel.getFaceList().get(j);
+				h1 = faceIn.getOuterComponent();
+				
+				heTmp = h1.getNext();
+				nbEdgesCrossed = 0;
+				
+				while ( !(heTmp.equals(h1)) ){
+					if ( v1.crossHorizontal(heTmp) ){
+						//System.out.println(heTmp.getId());
+						nbEdgesCrossed++;
+					}
+					heTmp = heTmp.getNext();
+				}
+				System.out.println(faceOut.getId()+"->"+faceIn.getId()+" - times... "+nbEdgesCrossed);
+				
+			}
+		}
 	}
 }

@@ -220,8 +220,8 @@ public class FindDCEL {
 			}
 		}
 		
-		System.out.println("Inner : "+dcel.getFaceList().size()+" - Outer : "+outerFace.size());
-		System.out.println("===");
+		//System.out.println("Inner : "+dcel.getFaceList().size()+" - Outer : "+outerFace.size());
+		//System.out.println("===");
 		
 		// Fill the innerComponent in the Faces
 		int nbFacesIn = dcel.getFaceList().size();
@@ -229,31 +229,94 @@ public class FindDCEL {
 		int nbEdgesCrossed;
 		
 		Face faceIn, faceOut;
-		Face faceRes = null;
-		int distRes = 0;
+		Face faceRes;
+		double distRes, distTmp, distTmp2;
 
 		for(int i=0; i<nbFacesOut; i++){
 			faceOut = outerFace.get(i);
 			v1 = faceOut.getOuterHalfEdge().getOrigin();
 			nbEdgesCrossed = 0;
+			distTmp = 0;
+			distRes = 0;
+			faceRes = null;
 			
 			for(int j=0; j<nbFacesIn; j++){
 				faceIn = dcel.getFaceList().get(j);
 				h1 = faceIn.getOuterComponent();
 				
-				heTmp = h1.getNext();
+				heTmp = h1;
 				nbEdgesCrossed = 0;
+				if ( v1.crossHorizontal(heTmp) ){
+					distTmp2 = v1.horizontalDistance(heTmp);
+					
+					if ( distTmp == 0 || distTmp2 < distTmp )
+						distTmp = distTmp2;
+					
+					nbEdgesCrossed++;
+				}
+				heTmp = heTmp.getNext();
 				
 				while ( !(heTmp.equals(h1)) ){
 					if ( v1.crossHorizontal(heTmp) ){
-						//System.out.println(heTmp.getId());
+						distTmp2 = v1.horizontalDistance(heTmp);
+						
+						if ( distTmp == 0 || distTmp2 < distTmp )
+							distTmp = distTmp2;
+						
 						nbEdgesCrossed++;
 					}
 					heTmp = heTmp.getNext();
 				}
-				System.out.println(faceOut.getId()+"->"+faceIn.getId()+" - times... "+nbEdgesCrossed);
+				//System.out.println(faceOut.getId()+"->"+faceIn.getId()+" - times... "+nbEdgesCrossed%2);
 				
+				// here is the trick: if there are an odd edges crossed
+				// faceOut is included in faceIn
+				// in order to know which one is the tinier, we just use 
+				// distance between a vertex and a Half Edge
+				if ( nbEdgesCrossed%2 == 1 ){
+					if ( distRes == 0 ){
+						faceRes = faceIn;
+						distRes = distTmp;
+					}
+					else
+					{
+						if ( distTmp < distRes ){
+							faceRes = faceIn;
+							distRes = distTmp;
+						}
+					}
+				}
 			}
+			if ( distRes == 0 ){
+				faceRes = f0;
+			}
+			
+			//System.out.println("Face "+faceOut.getId()+" points to face "+faceRes.getId());
+			
+			// Link faces with holes
+			nbHalfEdges = dcel.getHalfEdgeList().size();
+			for(int j=0; j<nbHalfEdges; j++){
+				he1 = dcel.getHalfEdgeList().get(j);
+				if ( he1.getFace().equals(faceOut) ){
+					he1.setFace(faceRes);
+				}
+			}
+			
+			// Fill the inner components
+			faceRes.addInnerComponent(faceOut.getOuterComponent());
 		}
+		
+		//add the infinite face to the Face List
+		dcel.addFaceList(f0);
+		
+		/*
+		nbHalfEdges = dcel.getHalfEdgeList().size();
+		for(int j=0; j<nbHalfEdges; j++){
+			heTmp = dcel.getHalfEdgeList().get(j);
+			System.out.println("id:"+heTmp.getId()+"_face:"+heTmp.getFace().getId()+"_prev:"+heTmp.getPrev().getId()+"_next:"+heTmp.getNext().getId());
+		}
+		*/
+		
+		dcel.printDCEL();
 	}
 }

@@ -11,9 +11,10 @@ public class Face {
 	private HalfEdge outerHalfEdge;
 	
 
-	public Face(HalfEdge inner, int id){
+	public Face(HalfEdge outer, int id){
 		this(id);
-		this.setInnerComponent(inner);
+		this.setOuterComponent(outer);
+		this.setInnerComponent(new ArrayList<HalfEdge>());
 	}
 	
 	public Face(int id){
@@ -31,7 +32,7 @@ public class Face {
 	}
 
 
-	public void setInnerComponent(HalfEdge outerComponent) {
+	public void setOuterComponent(HalfEdge outerComponent) {
 		this.outerComponent = outerComponent;
 	}
 
@@ -49,7 +50,11 @@ public class Face {
 	public ArrayList<HalfEdge> getInnerComponent() {
 		return innerComponent;
 	}
-
+	
+	public void addInnerComponent(HalfEdge he) {
+		this.innerComponent.add(he);
+	}
+	
 	public void setIsOuter(boolean isOuter) {
 		this.isOuter = isOuter;
 	}

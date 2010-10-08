@@ -71,5 +71,70 @@ public class DCEL {
 	public ArrayList<Face> getFaceList() {
 		return faceList;
 	}
+	
+	public void printDCEL(){
+		int nbFaces = this.getFaceList().size();
+		int nbHalfEdges = this.getHalfEdgeList().size();
+		int nbVertex = this.getVertexList().size();
+
+		Face faceTmp;
+		HalfEdge heTmp;
+		Vertex vTmp;
+		
+		
+		//Print Vertex List
+		System.out.println("\nVERTEX");
+		
+		for(int j=0; j<nbVertex; j++){
+			vTmp = this.getVertexList().get(j);
+			System.out.println("\nid: "+vTmp.getId());
+			System.out.println("coordinates: "+vTmp.getP().getX()+" "+vTmp.getP().getY());
+			System.out.println("incidentEdge: "+vTmp.getHalfEdge().getId());
+		}
+		
+		//Print HalfEdge List
+		System.out.println("\nHALF EDGES");
+		
+		for(int j=0; j<nbHalfEdges; j++){
+			heTmp = this.getHalfEdgeList().get(j);
+			System.out.println("\nid: "+heTmp.getId());
+			System.out.println("origin: "+heTmp.getOrigin().getId());
+			System.out.println("twin: "+heTmp.getTwin().getId());
+			System.out.println("incidentFace: "+heTmp.getFace().getId());
+			System.out.println("next: "+heTmp.getNext().getId());
+			System.out.println("prev: "+heTmp.getPrev().getId());
+		}
+		
+		//Print FaceList
+		System.out.println("\nFACES");
+		
+		for(int j=0; j<nbFaces; j++){
+			faceTmp = this.getFaceList().get(j);
+			faceTmp.setId(j);
+		}
+		
+		for(int j=0; j<nbFaces; j++){
+			faceTmp = this.getFaceList().get(j);
+			
+			System.out.println("\nid:"+faceTmp.getId());
+			if ( faceTmp.getOuterComponent() == null ){
+				System.out.println("outerComponent: none");
+			}
+			else{
+				System.out.println("outerComponent: "+faceTmp.getOuterComponent().getId());
+			}
+			
+			ArrayList<HalfEdge> HalfEdges2 = faceTmp.getInnerComponent();
+			int nbHE = HalfEdges2.size();
+			
+			if ( nbHE == 0 ){
+				System.out.println("innerComponent: none");
+			}
+			
+			for(int i=0; i<nbHE; i++){
+				System.out.println("innerComponent: "+faceTmp.getInnerComponent().get(i).getId());
+			}
+		}
+	}
 
 }

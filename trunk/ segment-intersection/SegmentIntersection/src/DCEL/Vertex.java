@@ -92,4 +92,18 @@ public class Vertex {
 		return ( isBetween && isAtLeft );
 	}
 	
+	public double horizontalDistance(HalfEdge heTmp) {
+		Point2D p1, p2, p;
+		double scale, newX;
+		
+		p = this.getP();
+		p1 = heTmp.getOrigin().getP();
+		p2 = heTmp.getTwin().getOrigin().getP();
+		
+		scale = (p.getY()-p1.getY())/(p2.getY()-p1.getY());
+		newX = scale*(p2.getX()-p1.getX())+p1.getX();
+		
+		return p.getX()-newX;
+	}
+	
 }

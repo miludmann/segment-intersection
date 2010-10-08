@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
+
 import sceneGraph.SceneGraphTree;
 
 
@@ -372,7 +373,19 @@ public class DrawArea extends JPanel implements MouseListener,
         redrawAll();
         return newIntersection;
 	}
+	
+	public void drawPolygon (ArrayList<int[]> points){
+		
+		currentShape = new Polygon( points);
 
+		currentShape.setSkin(new Skin(1, new Color(255,0,0), new Color(255, 0, 0)));
+        MainWindow.root.addNode(currentShape);
+        
+        redrawAll();
+        
+	}
+
+	
 	// ------------------------------------------------------------------------
 	// Méthodes du MouseMotionListener
 	// ------------------------------------------------------------------------

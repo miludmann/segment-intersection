@@ -54,8 +54,13 @@ public class Polygon extends Shape {
 		}
 		setPolygon(xpoints, ypoints, npoints);
 	}
+	
 		
 	public java.awt.Polygon getShape() {
 		return polygon;
+	}
+
+	public void addPoint(int i, int j) {
+		polygon.addPoint(i, j);
 	}
 }

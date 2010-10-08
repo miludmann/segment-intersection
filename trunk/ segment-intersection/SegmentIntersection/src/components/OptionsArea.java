@@ -351,12 +351,12 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	}
 	
 	public void saveDCEL() {
-		
+		System.out.println("Save DCEL");
 		return;
 	}
 	
 	public void openDCEL() {
-	
+		System.out.println("Open DCEL");
 		return;
 	}
 	

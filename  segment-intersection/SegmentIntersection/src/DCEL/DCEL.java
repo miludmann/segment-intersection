@@ -1,9 +1,19 @@
 package DCEL;
 
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import components.DrawArea;
 
+import java.awt.geom.Point2D;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.JFileChooser;
+
+import components.DrawArea;
 
 
 public class DCEL {
@@ -140,6 +150,102 @@ public class DCEL {
 				System.out.println("innerComponent: "+faceTmp.getInnerComponent().get(i).getId());
 			}
 		}
+	}
+	
+	public void saveDCEL(){
+		JFileChooser fc = new JFileChooser();
+		
+		int saveStatus = fc.showSaveDialog(null);
+		
+		if ( saveStatus == JFileChooser.APPROVE_OPTION ){
+            File savedFile = fc.getSelectedFile();
+            try {
+				savedFile.createNewFile();
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
+		    try {
+
+		        BufferedWriter out = new BufferedWriter(new FileWriter(savedFile.toString()));
+		        
+		        int nbFaces = this.getFaceList().size();
+				int nbHalfEdges = this.getHalfEdgeList().size();
+				int nbVertex = this.getVertexList().size();
+
+				Face faceTmp;
+				HalfEdge heTmp;
+				Vertex vTmp;
+				
+				
+				//Print Vertex List
+				out.write("VERTEX: (id, xCoords, yCoords, incidentEdge)\n");
+				
+				for(int j=0; j<nbVertex; j++){
+					vTmp = this.getVertexList().get(j);
+					out.write(vTmp.getId() + " ");
+					out.write(vTmp.getP().getX() + " ");
+					out.write(vTmp.getP().getY() + " ");
+					out.write(vTmp.getHalfEdge().getId() + "\n");
+				}
+				
+				//Print HalfEdge List
+				out.write("\nHALF EDGES: (id, origin, twin, incidentFace, next, prev)\n");
+				
+				for(int j=0; j<nbHalfEdges; j++){
+					heTmp = this.getHalfEdgeList().get(j);
+					out.write(heTmp.getId() + " ");
+					out.write(heTmp.getOrigin().getId() + " ");
+					out.write(heTmp.getTwin().getId() + " ");
+					out.write(heTmp.getFace().getId() + " ");
+					out.write(heTmp.getNext().getId() + " ");
+					out.write(heTmp.getPrev().getId() + "\n");
+				}
+				
+				//Print FaceList
+				out.write("\nFACES: (id, outerComponent, innerComponent(s))\n");
+				
+				for(int j=0; j<nbFaces; j++){
+					faceTmp = this.getFaceList().get(j);
+					faceTmp.setId(j);
+				}
+				
+				for(int j=0; j<nbFaces; j++){
+					faceTmp = this.getFaceList().get(j);
+					
+					out.write(faceTmp.getId() + " ");
+					if ( faceTmp.getOuterComponent() == null ){
+						out.write("none ");
+					}
+					else{
+						out.write(faceTmp.getOuterComponent().getId() + " ");
+					}
+					
+					ArrayList<HalfEdge> HalfEdges2 = faceTmp.getInnerComponent();
+					int nbHE = HalfEdges2.size();
+					
+					if ( nbHE == 0 ){
+						out.write("none");
+					}
+					
+					for(int i=0; i<nbHE; i++){
+						out.write(faceTmp.getInnerComponent().get(i).getId() + " ");
+					}
+					
+					out.write("\n");
+				}
+		        
+		        out.close();
+
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }
+			
+		}
+			
 	}
 	
 	public void colorDCEL(ArrayList<Face> faceList){

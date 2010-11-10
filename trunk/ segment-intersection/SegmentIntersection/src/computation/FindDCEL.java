@@ -2,6 +2,8 @@ package computation;
 
 import java.util.ArrayList;
 
+import javax.swing.JFileChooser;
+
 import components.DrawArea;
 
 import DCEL.DCEL;
@@ -33,7 +35,7 @@ public class FindDCEL {
 		for(int i=0; i<nbSegments; i++){
 			segments.get(i).initSplitSegment();
 		}
-	
+
 		// Complete splitting operation
 		for(int i=0; i<nbIntersections; i++){
 			//System.out.println(intersections.get(i).getPoint().toString());
@@ -321,10 +323,16 @@ public class FindDCEL {
 		}
 		*/
 		
-		dcel.colorDCEL(dcel.getFaceList());
+		//dcel.colorDCEL(dcel.getFaceList());
 	}
 	
 	public void printDCEL(){
 		this.dcel.printDCEL();
+		this.dcel.colorDCEL(this.dcel.getFaceList());
+
+	}
+	
+	public void saveDCEL(){
+		this.dcel.saveDCEL();
 	}
 }

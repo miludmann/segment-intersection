@@ -20,6 +20,8 @@ public class Face {
 	public Face(int id){
 		this.setId(id);
 		this.setIsOuter(false);
+		this.setInnerComponent(new ArrayList<HalfEdge>());
+		this.setOuterComponent(null);
 	}
 
 	public void setId(int id) {

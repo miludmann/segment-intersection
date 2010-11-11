@@ -14,6 +14,10 @@ public class HalfEdge {
 		this.id = id;
 	}
 	
+	public HalfEdge(int id){
+		this.id = id;
+	}
+	
 	public void setOrigin(Vertex origin) {
 		this.origin = origin;
 	}

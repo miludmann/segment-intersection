@@ -12,6 +12,10 @@ public class Vertex {
 		this.setP(p);
 		this.setId(id);
 	}
+	
+	public Vertex(int id){
+		this.setId(id);
+	}
 
 	public void setP(Point2D p) {
 		this.p = p;

@@ -1,14 +1,17 @@
 package DCEL;
 
-
 import java.awt.geom.Point2D;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -52,6 +55,11 @@ public class DCEL {
 		vertexList.add(v);
 	}
 	
+	public void addVertex(int id){
+		Vertex v = new Vertex(id);
+		vertexList.add(v);
+	}
+	
 	public Vertex pointToVertex(Point2D p){
 		int nbVertex = this.vertexList.size();
 				
@@ -66,6 +74,11 @@ public class DCEL {
 	public void addHalfEdge(HalfEdge halfEdge){
 		this.halfEdgeList.add(halfEdge);
 	}
+	
+	public void addHalfEdge(int id){
+		HalfEdge he = new HalfEdge(id);
+		this.halfEdgeList.add(he);
+	}
 
 	public void setHalfEdgeList(ArrayList<HalfEdge> halfEdgeList) {
 		this.halfEdgeList = halfEdgeList;
@@ -78,7 +91,16 @@ public class DCEL {
 	public void addFaceList(Face face){
 		this.faceList.add(face);
 	}
-
+	
+	public void addFaceList(int id){
+		Face f = new Face(id);
+		
+		if ( id == 0 )
+			f.setIsOuter(true);
+		
+		this.faceList.add(f);
+	}
+		
 	public void setFaceList(ArrayList<Face> faceList) {
 		this.faceList = faceList;
 	}
@@ -110,6 +132,12 @@ public class DCEL {
 		//Print HalfEdge List
 		System.out.println("\nHALF EDGES");
 		
+		//Re-arrange the IDs of the faces
+		for(int j=0; j<nbFaces; j++){
+			faceTmp = this.getFaceList().get(j);
+			faceTmp.setId(j);
+		}
+		
 		for(int j=0; j<nbHalfEdges; j++){
 			heTmp = this.getHalfEdgeList().get(j);
 			System.out.println("\nid: "+heTmp.getId());
@@ -122,11 +150,7 @@ public class DCEL {
 		
 		//Print FaceList
 		System.out.println("\nFACES");
-		
-		for(int j=0; j<nbFaces; j++){
-			faceTmp = this.getFaceList().get(j);
-			faceTmp.setId(j);
-		}
+
 		
 		for(int j=0; j<nbFaces; j++){
 			faceTmp = this.getFaceList().get(j);
@@ -166,7 +190,6 @@ public class DCEL {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 
 		    try {
 
@@ -180,9 +203,14 @@ public class DCEL {
 				HalfEdge heTmp;
 				Vertex vTmp;
 				
+				//Print Infos
+				out.write("INFOS: (nb Vertex, nb Half-Edges, nb Faces)\n");
+				out.write(this.getVertexList().size() + " ");
+				out.write(this.getHalfEdgeList().size() + " ");
+				out.write(this.getFaceList().size() + "\n");
 				
 				//Print Vertex List
-				out.write("VERTEX: (id, xCoords, yCoords, incidentEdge)\n");
+				out.write("\nVERTEX: (id, xCoords, yCoords, incidentEdge)\n");
 				
 				for(int j=0; j<nbVertex; j++){
 					vTmp = this.getVertexList().get(j);
@@ -195,6 +223,11 @@ public class DCEL {
 				//Print HalfEdge List
 				out.write("\nHALF EDGES: (id, origin, twin, incidentFace, next, prev)\n");
 				
+				//Re-arrange the IDs of the faces
+				for(int j=0; j<nbFaces; j++){
+					faceTmp = this.getFaceList().get(j);
+					faceTmp.setId(j);
+				}
 				for(int j=0; j<nbHalfEdges; j++){
 					heTmp = this.getHalfEdgeList().get(j);
 					out.write(heTmp.getId() + " ");
@@ -207,18 +240,13 @@ public class DCEL {
 				
 				//Print FaceList
 				out.write("\nFACES: (id, outerComponent, innerComponent(s))\n");
-				
-				for(int j=0; j<nbFaces; j++){
-					faceTmp = this.getFaceList().get(j);
-					faceTmp.setId(j);
-				}
-				
+
 				for(int j=0; j<nbFaces; j++){
 					faceTmp = this.getFaceList().get(j);
 					
 					out.write(faceTmp.getId() + " ");
 					if ( faceTmp.getOuterComponent() == null ){
-						out.write("none ");
+						out.write("-1 ");
 					}
 					else{
 						out.write(faceTmp.getOuterComponent().getId() + " ");
@@ -228,7 +256,7 @@ public class DCEL {
 					int nbHE = HalfEdges2.size();
 					
 					if ( nbHE == 0 ){
-						out.write("none");
+						out.write("-1");
 					}
 					
 					for(int i=0; i<nbHE; i++){
@@ -243,9 +271,11 @@ public class DCEL {
 		    } catch (IOException e) {
 		      e.printStackTrace();
 		    }
-			
 		}
-			
+	}
+	
+	public void openDCEL(){
+
 	}
 	
 	public void colorDCEL(ArrayList<Face> faceList){
@@ -297,13 +327,9 @@ public class DCEL {
 		}
 		while ( !(h0.equals(heTmp)) );
 		
-		
-				
 		drawArea.drawPolygon(points);
 		return;
 	}
-
-
 
 	public void setDrawArea(DrawArea drawArea) {
 		this.drawArea = drawArea;

@@ -1,5 +1,13 @@
 package computation;
 
+import java.awt.geom.Point2D;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -86,7 +94,6 @@ public class FindDCEL {
 				
 				v1.setHalfEdge(h1);
 				v2.setHalfEdge(h2);
-				
 			}
 		}
 		
@@ -300,6 +307,7 @@ public class FindDCEL {
 			//System.out.println("Face "+faceOut.getId()+" points to face "+faceRes.getId());
 			
 			// Link faces with holes
+			
 			nbHalfEdges = dcel.getHalfEdgeList().size();
 			for(int j=0; j<nbHalfEdges; j++){
 				he1 = dcel.getHalfEdgeList().get(j);
@@ -328,11 +336,162 @@ public class FindDCEL {
 	
 	public void printDCEL(){
 		this.dcel.printDCEL();
+		this.colorDCEL();
+	}
+	
+	public void colorDCEL(){
 		this.dcel.colorDCEL(this.dcel.getFaceList());
-
 	}
 	
 	public void saveDCEL(){
 		this.dcel.saveDCEL();
+	}
+	
+	public void openDCEL(){
+		
+		this.dcel = new DCEL(drawArea);
+		
+		JFileChooser fc = new JFileChooser();
+		
+		int openStatus = fc.showOpenDialog(null);
+
+
+		if ( openStatus == JFileChooser.APPROVE_OPTION ){
+            File openedFile = fc.getSelectedFile();
+
+            try {
+            	FileInputStream fis = new FileInputStream(openedFile);
+
+                // Here BufferedInputStream is added for fast reading.
+            	BufferedInputStream bis = new BufferedInputStream(fis);
+            	BufferedReader d = new BufferedReader(new InputStreamReader(bis));
+
+                String line = null;
+                String[] lineSplit ;
+                int id, incidentEdge, origin, twin, incidentFace, next, prev, outer, inner;
+                Float xcoord, ycoord;
+                int nbVertex, nbHalfEdge, nbFaces;
+                
+                
+                // First while loop, we initiate the vertex, half edges and faces 
+                // We simply input the IDs
+                while ((line = d.readLine()) != null) {
+                	
+                	lineSplit = line.split(" ");
+                	
+                	if ( lineSplit.length == 1){
+                		d.readLine();
+                		break;
+                	}
+                	
+                	if ( lineSplit.length == 3){
+                		nbVertex = (int) Float.parseFloat(lineSplit[0]);
+                		nbHalfEdge = (int) Float.parseFloat(lineSplit[1]);
+                		nbFaces = (int) Float.parseFloat(lineSplit[2]);
+                		
+                    	System.out.println("blablabla " + nbVertex + " " + nbHalfEdge + " " + nbFaces);
+        				
+                    	for ( int i = 0; i < nbVertex; i++){
+                    		this.dcel.addVertex(i);
+                    	}
+                    	
+                    	for ( int i = 0; i < nbHalfEdge; i++){
+                    		this.dcel.addHalfEdge(i);
+                    	}
+                    	
+                    	for ( int i = 0; i < nbFaces; i++){
+                    		this.dcel.addFaceList(i);
+                    	}
+                    	
+                    	System.out.println("nb Vertex dans la DCEL " + this.dcel.getVertexList().size());
+                    	System.out.println("nb hEdges dans la DCEL " + this.dcel.getHalfEdgeList().size());
+                    	System.out.println("nb  Faces dans la DCEL " + this.dcel.getFaceList().size());
+                	}
+                }
+                
+                // Second while loop, we set the vertex fields 
+                while ((line = d.readLine()) != null) {
+                	
+                	lineSplit = line.split(" ");
+                	
+                	if ( lineSplit.length == 1){
+                		d.readLine();
+                		break;
+                	}
+
+                	id = (int) Float.parseFloat(lineSplit[0]);
+                	xcoord = Float.parseFloat(lineSplit[1]);
+                	ycoord = Float.parseFloat(lineSplit[2]);
+                	incidentEdge = (int) Float.parseFloat(lineSplit[3]);
+                	
+                	Point2D p = new Point2D.Float(xcoord, ycoord);
+                	
+                	this.dcel.getVertexList().get(id).setP(p);
+                	this.dcel.getVertexList().get(id).setHalfEdge(this.dcel.getHalfEdgeList().get(incidentEdge));
+                }
+                
+                // Second while loop, we set the half edges fields 
+                while ((line = d.readLine()) != null) {
+                	
+                	lineSplit = line.split(" ");
+                	
+                	if ( lineSplit.length == 1){
+                		d.readLine();
+                		break;
+                	}
+                	
+                	id = (int) Float.parseFloat(lineSplit[0]);
+                	origin = (int) Float.parseFloat(lineSplit[1]);
+                	twin = (int) Float.parseFloat(lineSplit[2]);
+                	incidentFace = (int) Float.parseFloat(lineSplit[3]);
+                	next = (int) Float.parseFloat(lineSplit[4]);
+                	prev = (int) Float.parseFloat(lineSplit[5]);
+                	
+                	this.dcel.getHalfEdgeList().get(id).setOrigin(this.dcel.getVertexList().get(origin));
+                	this.dcel.getHalfEdgeList().get(id).setTwin(this.dcel.getHalfEdgeList().get(twin));
+                	this.dcel.getHalfEdgeList().get(id).setFace(this.dcel.getFaceList().get(incidentFace));
+                	this.dcel.getHalfEdgeList().get(id).setNext(this.dcel.getHalfEdgeList().get(next));
+                	this.dcel.getHalfEdgeList().get(id).setPrev(this.dcel.getHalfEdgeList().get(prev));
+                }
+                
+                while ((line = d.readLine()) != null) {
+                	
+                	lineSplit = line.split(" ");
+                	
+                	if ( lineSplit.length == 1)
+                		break;
+                	
+                	id = (int) Float.parseFloat(lineSplit[0]);
+                	outer = (int) Float.parseFloat(lineSplit[1]);
+                	
+                	int lng = lineSplit.length;
+                	
+                	if ( outer != -1 ){
+                    	this.dcel.getFaceList().get(id).setOuterComponent(this.dcel.getHalfEdgeList().get(outer));
+                	}
+                	
+                	for ( int i=2; i<lng; i++ ){
+                		inner = (int) Float.parseFloat(lineSplit[i]);
+                    	if ( inner != -1 ){
+                    		this.dcel.getFaceList().get(id).getInnerComponent().add(this.dcel.getHalfEdgeList().get(inner));
+                    	}
+                	}
+
+                	System.out.println(lineSplit.length + "___" + line);
+                }
+
+            // dispose all the resources after using them.
+            fis.close();
+            bis.close();
+            d.close();
+
+          } catch (FileNotFoundException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+		}
+		
+		this.dcel.printDCEL();
 	}
 }

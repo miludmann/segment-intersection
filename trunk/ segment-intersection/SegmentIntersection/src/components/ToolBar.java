@@ -40,6 +40,7 @@ public class ToolBar extends JToolBar
     private JButton supprimer = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
     private JButton findInter = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/find_inter.png")));
     private JButton findDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/calc.png")));
+    private JButton colorDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/polygone.png")));
     private JButton saveDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/save.png")));
     private JButton openDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/refresh.png")));
     
@@ -59,6 +60,7 @@ public class ToolBar extends JToolBar
         supprimer.addActionListener(new ActionManager(ActionToPerform.DELETE, optionsArea));
         findInter.addActionListener(new ActionManager(ActionToPerform.FIND_INTER, optionsArea));
         findDCEL.addActionListener(new ActionManager(ActionToPerform.FIND_DCEL, optionsArea));
+        colorDCEL.addActionListener(new ActionManager(ActionToPerform.COLOR_DCEL, optionsArea));
         saveDCEL.addActionListener(new ActionManager(ActionToPerform.SAVE_DCEL, optionsArea));
         openDCEL.addActionListener(new ActionManager(ActionToPerform.OPEN_DCEL, optionsArea));
         
@@ -72,6 +74,7 @@ public class ToolBar extends JToolBar
         supprimer.setToolTipText("Delete");
         findInter.setToolTipText("Find Intersections");
         findDCEL.setToolTipText("Find DCEL");
+        colorDCEL.setToolTipText("Color DCEL");
         saveDCEL.setToolTipText("Save DCEL");
         openDCEL.setToolTipText("Open DCEL");
 
@@ -94,6 +97,7 @@ public class ToolBar extends JToolBar
         this.addSeparator();
         
         this.add(findDCEL);
+        this.add(colorDCEL);
         this.add(saveDCEL);
         this.add(openDCEL);
         

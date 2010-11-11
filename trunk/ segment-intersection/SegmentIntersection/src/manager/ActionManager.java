@@ -34,7 +34,7 @@ public class ActionManager implements ActionListener
 		ACK_DEL,DELETE,
 		DRAW_SEGMENT,
 		REDRAW_ALL, OPEN, FIND_INTER,
-		FIND_DCEL, SAVE_DCEL, OPEN_DCEL;
+		COLOR_DCEL, FIND_DCEL, SAVE_DCEL, OPEN_DCEL;
 						
 		/**
 		 * Demande au Gestionnaire d'effectuer une action 
@@ -101,6 +101,10 @@ public class ActionManager implements ActionListener
 				
 			case FIND_DCEL:
 				am.getZone().findDCEL();
+				return;
+				
+			case COLOR_DCEL:
+				am.getZone().colorDCEL();
 				return;
 				
 			case SAVE_DCEL:

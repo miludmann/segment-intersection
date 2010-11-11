@@ -70,6 +70,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
     private JComboBox listeFormes;
     private SpinnerNumberModel nbCotesRouletteModel;
     private JSpinner nbCotesRoulette;
+    private FindDCEL fd;
        
 
     /**
@@ -80,7 +81,8 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	public OptionsArea(DrawArea drawArea) {
         super();
         
-        this.drawArea = drawArea;        
+        this.drawArea = drawArea; 
+        this.fd = null;
         
         /* ComboBox pour les épaisseurs de ligne */
         float[] thickness = {1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f};
@@ -346,21 +348,22 @@ public class OptionsArea extends JPanel implements ChangeListener {
 
 	public void findDCEL() {
 		findIntersections();
-		FindDCEL fd ;
 		fd = new FindDCEL(getDrawArea().getSceneGraphArea().getSegments(), getDrawArea().getSceneGraphArea().getIntersections(), getDrawArea());
-		fd.printDCEL();
+	}
+	
+	public void colorDCEL(){
+		if ( fd != null )
+			fd.colorDCEL();
+		return;
 	}
 	
 	public void saveDCEL() {
-		findIntersections();
-		FindDCEL fd ;
-		fd = new FindDCEL(getDrawArea().getSceneGraphArea().getSegments(), getDrawArea().getSceneGraphArea().getIntersections(), getDrawArea());
-		fd.saveDCEL();
+		if ( fd != null )
+			fd.saveDCEL();
 		return;
 	}
 	
 	public void openDCEL() {
-		FindDCEL fd ;
 		fd = new FindDCEL(getDrawArea().getSceneGraphArea().getSegments(), getDrawArea().getSceneGraphArea().getIntersections(), getDrawArea());
 		fd.openDCEL();
 		return;

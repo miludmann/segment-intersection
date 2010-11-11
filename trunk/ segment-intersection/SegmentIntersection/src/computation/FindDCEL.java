@@ -389,8 +389,6 @@ public class FindDCEL {
                 		nbHalfEdge = (int) Float.parseFloat(lineSplit[1]);
                 		nbFaces = (int) Float.parseFloat(lineSplit[2]);
                 		
-                    	System.out.println("blablabla " + nbVertex + " " + nbHalfEdge + " " + nbFaces);
-        				
                     	for ( int i = 0; i < nbVertex; i++){
                     		this.dcel.addVertex(i);
                     	}
@@ -403,9 +401,9 @@ public class FindDCEL {
                     		this.dcel.addFaceList(i);
                     	}
                     	
-                    	System.out.println("nb Vertex dans la DCEL " + this.dcel.getVertexList().size());
-                    	System.out.println("nb hEdges dans la DCEL " + this.dcel.getHalfEdgeList().size());
-                    	System.out.println("nb  Faces dans la DCEL " + this.dcel.getFaceList().size());
+                    	//System.out.println("nb Vertex in DCEL " + this.dcel.getVertexList().size());
+                    	//System.out.println("nb hEdges in DCEL " + this.dcel.getHalfEdgeList().size());
+                    	//System.out.println("nb  Faces in DCEL " + this.dcel.getFaceList().size());
                 	}
                 }
                 
@@ -491,7 +489,7 @@ public class FindDCEL {
           }
 		}
 		
-		this.dcel.printDCEL();
-		colorDCEL();
+		//this.dcel.printDCEL();
+		//colorDCEL();
 	}
 }

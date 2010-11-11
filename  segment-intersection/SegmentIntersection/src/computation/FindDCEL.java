@@ -468,6 +468,7 @@ public class FindDCEL {
                 	
                 	if ( outer != -1 ){
                     	this.dcel.getFaceList().get(id).setOuterComponent(this.dcel.getHalfEdgeList().get(outer));
+                    	this.dcel.getFaceList().get(id).analyseFace();
                 	}
                 	
                 	for ( int i=2; i<lng; i++ ){
@@ -476,8 +477,6 @@ public class FindDCEL {
                     		this.dcel.getFaceList().get(id).getInnerComponent().add(this.dcel.getHalfEdgeList().get(inner));
                     	}
                 	}
-
-                	System.out.println(lineSplit.length + "___" + line);
                 }
 
             // dispose all the resources after using them.
@@ -493,5 +492,6 @@ public class FindDCEL {
 		}
 		
 		this.dcel.printDCEL();
+		colorDCEL();
 	}
 }

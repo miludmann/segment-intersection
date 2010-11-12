@@ -43,6 +43,8 @@ public class ToolBar extends JToolBar
     private JButton colorDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/polygone.png")));
     private JButton saveDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/save.png")));
     private JButton openDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/refresh.png")));
+    private JButton locatePoint = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/selectionnerTout.png")));
+    
     
 
 
@@ -63,10 +65,11 @@ public class ToolBar extends JToolBar
         colorDCEL.addActionListener(new ActionManager(ActionToPerform.COLOR_DCEL, optionsArea));
         saveDCEL.addActionListener(new ActionManager(ActionToPerform.SAVE_DCEL, optionsArea));
         openDCEL.addActionListener(new ActionManager(ActionToPerform.OPEN_DCEL, optionsArea));
-        
+        locatePoint.addActionListener(new ActionManager(ActionToPerform.LOCATE_POINT, optionsArea));
+               
 
         
-        segment.setToolTipText("Draw segment");
+        //segment.setToolTipText("Draw segment");
         nouvellePage.setToolTipText("New sheet");
         openFile.setToolTipText("Open File");
         defaire.setToolTipText("Undo");
@@ -77,6 +80,7 @@ public class ToolBar extends JToolBar
         colorDCEL.setToolTipText("Color DCEL");
         saveDCEL.setToolTipText("Save DCEL");
         openDCEL.setToolTipText("Open DCEL");
+        locatePoint.setToolTipText("Locate point");
 
         
         this.setLayout(new GridLayout(1, 0));
@@ -103,7 +107,7 @@ public class ToolBar extends JToolBar
         
         this.addSeparator();
 
-        this.add(segment);
+        this.add(locatePoint);
             
         this.setBorder(BorderFactory.createEtchedBorder());
     }

@@ -301,14 +301,15 @@ public class DCEL {
 	
 	public void colorDCEL(Face face){
 		
-		Point2D pTmp;
+		Point2D pTmp, pTmp2;
 		HalfEdge heTmp;
 		HalfEdge h0;
+		ArrayList<HalfEdge> innerComp;
 		ArrayList<int[]> points = new ArrayList<int[]>();
 		h0 = face.getOuterComponent();
 		heTmp = h0;
 
-		
+		// we add the main points of the polygon
 		do{
 			pTmp = heTmp.getOrigin().getP();
 			int[] point = new int[] { (int) pTmp.getX(), (int) pTmp.getY() };
@@ -316,6 +317,30 @@ public class DCEL {
 			heTmp = heTmp.getNext();
 		}
 		while ( !(h0.equals(heTmp)) );
+		
+		// and from here we "substract" the innerComponents
+		pTmp2 = heTmp.getOrigin().getP();
+		innerComp = face.getInnerComponent();
+		
+		for ( int i = 0; i < innerComp.size(); i++ ){
+			int[] point = new int[] { (int) pTmp2.getX(), (int) pTmp2.getY() };
+			points.add(point);
+			
+			heTmp = h0 = innerComp.get(i);
+			
+			do{
+				pTmp = heTmp.getOrigin().getP();
+				int[] pointIn = new int[] { (int) pTmp.getX(), (int) pTmp.getY() };
+				points.add(pointIn);
+				heTmp = heTmp.getNext();
+			}
+			while ( !(h0.equals(heTmp)) );
+			
+			pTmp = heTmp.getOrigin().getP();
+			int[] pointIn = new int[] { (int) pTmp.getX(), (int) pTmp.getY() };
+			points.add(pointIn);
+		}
+		
 		
 		drawArea.drawPolygon(points);
 		return;

@@ -351,9 +351,6 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	public void findDCEL() {
 		findIntersections();
 		fd = new FindDCEL(getDrawArea().getSceneGraphArea().getSegments(), getDrawArea().getSceneGraphArea().getIntersections(), getDrawArea());
-		FindLocation fl = new FindLocation(fd.getDcel());
-		fl.createSegmentList();
-		
 	}
 	
 	public void colorDCEL(){
@@ -374,5 +371,11 @@ public class OptionsArea extends JPanel implements ChangeListener {
 		return;
 	}
 	
+	public void locatePoint(){
+		if ( fd != null ){
+			FindLocation fl = new FindLocation(fd.getDcel());
+			fl.createSegmentList();
+		}
+	}
 }
 	

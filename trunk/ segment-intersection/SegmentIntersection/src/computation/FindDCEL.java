@@ -30,7 +30,7 @@ public class FindDCEL {
 	public FindDCEL(ArrayList<Segment> segments, ArrayList<Intersection> intersections, DrawArea drawArea){
 
 		// Initialize DCEL
-		dcel = new DCEL(drawArea);
+		setDcel(new DCEL(drawArea));
 		this.drawArea = drawArea;
 		
 		int nbIntersections = intersections.size();
@@ -65,7 +65,7 @@ public class FindDCEL {
 			int nbSplit = segments.get(i).getSplit().size();
 			
 			for(int j=0; j<nbSplit; j++){
-				this.dcel.addVertex(segments.get(i).getSplit().get(j));
+				this.getDcel().addVertex(segments.get(i).getSplit().get(j));
 			}
 		}
 		
@@ -80,14 +80,14 @@ public class FindDCEL {
 			int nbSplit = segments.get(i).getSplit().size();
 			
 			for(int j=0; j<(nbSplit-1); j++){
-				v1 = this.dcel.pointToVertex(segments.get(i).getSplit().get(j));
-				v2 = this.dcel.pointToVertex(segments.get(i).getSplit().get(j+1));
+				v1 = this.getDcel().pointToVertex(segments.get(i).getSplit().get(j));
+				v2 = this.getDcel().pointToVertex(segments.get(i).getSplit().get(j+1));
 				
-				h1 = new HalfEdge(v1, this.dcel.getHalfEdgeList().size());
-				this.dcel.addHalfEdge(h1);
+				h1 = new HalfEdge(v1, this.getDcel().getHalfEdgeList().size());
+				this.getDcel().addHalfEdge(h1);
 
-				h2 = new HalfEdge(v2, this.dcel.getHalfEdgeList().size());
-				this.dcel.addHalfEdge(h2);
+				h2 = new HalfEdge(v2, this.getDcel().getHalfEdgeList().size());
+				this.getDcel().addHalfEdge(h2);
 				
 				h1.setTwin(h2);
 				h2.setTwin(h1);
@@ -116,7 +116,7 @@ public class FindDCEL {
 		//System.out.println("===");
 
 		// Stores next and prev in Half Edge List
-		int nbHalfEdges = dcel.getHalfEdgeList().size();
+		int nbHalfEdges = getDcel().getHalfEdgeList().size();
 		ArrayList<HalfEdge> tmpHalfEdges = new ArrayList<HalfEdge>();
 		Vertex v3, v4, vtmp;
 		HalfEdge he1, he2, heTmp;
@@ -126,7 +126,7 @@ public class FindDCEL {
 		for(int i=0; i<nbHalfEdges; i++){
 			tmpHalfEdges.clear();
 			
-			he1 = this.dcel.getHalfEdgeList().get(i);
+			he1 = this.getDcel().getHalfEdgeList().get(i);
 			
 			v1 = he1.getTwin().getOrigin();
 			v2 = he1.getOrigin();
@@ -138,11 +138,11 @@ public class FindDCEL {
 			
 			for(int j=0; j<nbHalfEdges; j++){
 				
-				v3 = this.dcel.getHalfEdgeList().get(j).getOrigin();
+				v3 = this.getDcel().getHalfEdgeList().get(j).getOrigin();
 				
 				if ( v1.equals(v3) ){
 					
-					heTmp = this.dcel.getHalfEdgeList().get(j);
+					heTmp = this.getDcel().getHalfEdgeList().get(j);
 					v4 = heTmp.getTwin().getOrigin();
 					tmpHalfEdges.add(heTmp);
 					angle = v1.getAngle(v2, v4);
@@ -175,14 +175,14 @@ public class FindDCEL {
 		*/
 		
 		// Face part (rt+lm)
-		ArrayList<HalfEdge> HalfEdgesBis = (ArrayList<HalfEdge>) dcel.getHalfEdgeList().clone();
+		ArrayList<HalfEdge> HalfEdgesBis = (ArrayList<HalfEdge>) getDcel().getHalfEdgeList().clone();
 		Face face;
 		
 		while ( HalfEdgesBis.size() > 0 ){
 			
 			he1 = HalfEdgesBis.get(0);
-			face = new Face(he1, dcel.getFaceList().size());
-			dcel.addFaceList(face);
+			face = new Face(he1, getDcel().getFaceList().size());
+			getDcel().addFaceList(face);
 			
 			he1.setFace(face);
 			HalfEdgesBis.remove(he1);
@@ -203,11 +203,11 @@ public class FindDCEL {
 			System.out.println("id:"+heTmp.getId()+"_face:"+heTmp.getFace().getId()+"_prev:"+heTmp.getPrev().getId()+"_next:"+heTmp.getNext().getId());
 		}
 		*/
-		int nbFaces = dcel.getFaceList().size();
+		int nbFaces = getDcel().getFaceList().size();
 		Face faceTmp;
 		
 		for(int j=0; j<nbFaces; j++){
-			faceTmp = dcel.getFaceList().get(j);
+			faceTmp = getDcel().getFaceList().get(j);
 			faceTmp.analyseFace();
 
 			//System.out.println("id:"+faceTmp.getId()+"_outerComponent:"+faceTmp.getOuterComponent().getId()+"_outer:"+faceTmp.getIsOuter());
@@ -218,18 +218,18 @@ public class FindDCEL {
 		
 		// Split inner and outer
 		ArrayList<Face> outerFace = new ArrayList<Face>();
-		nbFaces = dcel.getFaceList().size();
+		nbFaces = getDcel().getFaceList().size();
 		
 		Face f0 = new Face(null, nbFaces); // the infinite Face
 
 
 		for(int j=0; j<nbFaces; j++){
-			faceTmp = dcel.getFaceList().get(j);
+			faceTmp = getDcel().getFaceList().get(j);
 			
 			if ( faceTmp.getIsOuter() ){
 				outerFace.add(faceTmp);
-				dcel.getFaceList().remove(faceTmp);
-				nbFaces = dcel.getFaceList().size();
+				getDcel().getFaceList().remove(faceTmp);
+				nbFaces = getDcel().getFaceList().size();
 			}
 		}
 		
@@ -237,7 +237,7 @@ public class FindDCEL {
 		//System.out.println("===");
 		
 		// Fill the innerComponent in the Faces
-		int nbFacesIn = dcel.getFaceList().size();
+		int nbFacesIn = getDcel().getFaceList().size();
 		int nbFacesOut = outerFace.size();
 		int nbEdgesCrossed;
 		
@@ -254,7 +254,7 @@ public class FindDCEL {
 			faceRes = null;
 			
 			for(int j=0; j<nbFacesIn; j++){
-				faceIn = dcel.getFaceList().get(j);
+				faceIn = getDcel().getFaceList().get(j);
 				h1 = faceIn.getOuterComponent();
 				
 				heTmp = h1;
@@ -308,9 +308,9 @@ public class FindDCEL {
 			
 			// Link faces with holes
 			
-			nbHalfEdges = dcel.getHalfEdgeList().size();
+			nbHalfEdges = getDcel().getHalfEdgeList().size();
 			for(int j=0; j<nbHalfEdges; j++){
-				he1 = dcel.getHalfEdgeList().get(j);
+				he1 = getDcel().getHalfEdgeList().get(j);
 				if ( he1.getFace().equals(faceOut) ){
 					he1.setFace(faceRes);
 				}
@@ -321,7 +321,7 @@ public class FindDCEL {
 		}
 		
 		//add the infinite face to the Face List
-		dcel.addFaceList(f0);
+		getDcel().addFaceList(f0);
 		
 		/*
 		nbHalfEdges = dcel.getHalfEdgeList().size();
@@ -335,21 +335,21 @@ public class FindDCEL {
 	}
 	
 	public void printDCEL(){
-		this.dcel.printDCEL();
+		this.getDcel().printDCEL();
 		this.colorDCEL();
 	}
 	
 	public void colorDCEL(){
-		this.dcel.colorDCEL(this.dcel.getFaceList());
+		this.getDcel().colorDCEL(this.getDcel().getFaceList());
 	}
 	
 	public void saveDCEL(){
-		this.dcel.saveDCEL();
+		this.getDcel().saveDCEL();
 	}
 	
 	public void openDCEL(){
 		
-		this.dcel = new DCEL(drawArea);
+		this.setDcel(new DCEL(drawArea));
 		
 		JFileChooser fc = new JFileChooser();
 		
@@ -390,15 +390,15 @@ public class FindDCEL {
                 		nbFaces = (int) Float.parseFloat(lineSplit[2]);
                 		
                     	for ( int i = 0; i < nbVertex; i++){
-                    		this.dcel.addVertex(i);
+                    		this.getDcel().addVertex(i);
                     	}
                     	
                     	for ( int i = 0; i < nbHalfEdge; i++){
-                    		this.dcel.addHalfEdge(i);
+                    		this.getDcel().addHalfEdge(i);
                     	}
                     	
                     	for ( int i = 0; i < nbFaces; i++){
-                    		this.dcel.addFaceList(i);
+                    		this.getDcel().addFaceList(i);
                     	}
                     	
                     	//System.out.println("nb Vertex in DCEL " + this.dcel.getVertexList().size());
@@ -424,8 +424,8 @@ public class FindDCEL {
                 	
                 	Point2D p = new Point2D.Float(xcoord, ycoord);
                 	
-                	this.dcel.getVertexList().get(id).setP(p);
-                	this.dcel.getVertexList().get(id).setHalfEdge(this.dcel.getHalfEdgeList().get(incidentEdge));
+                	this.getDcel().getVertexList().get(id).setP(p);
+                	this.getDcel().getVertexList().get(id).setHalfEdge(this.getDcel().getHalfEdgeList().get(incidentEdge));
                 }
                 
                 // Second while loop, we set the half edges fields 
@@ -445,11 +445,11 @@ public class FindDCEL {
                 	next = (int) Float.parseFloat(lineSplit[4]);
                 	prev = (int) Float.parseFloat(lineSplit[5]);
                 	
-                	this.dcel.getHalfEdgeList().get(id).setOrigin(this.dcel.getVertexList().get(origin));
-                	this.dcel.getHalfEdgeList().get(id).setTwin(this.dcel.getHalfEdgeList().get(twin));
-                	this.dcel.getHalfEdgeList().get(id).setFace(this.dcel.getFaceList().get(incidentFace));
-                	this.dcel.getHalfEdgeList().get(id).setNext(this.dcel.getHalfEdgeList().get(next));
-                	this.dcel.getHalfEdgeList().get(id).setPrev(this.dcel.getHalfEdgeList().get(prev));
+                	this.getDcel().getHalfEdgeList().get(id).setOrigin(this.getDcel().getVertexList().get(origin));
+                	this.getDcel().getHalfEdgeList().get(id).setTwin(this.getDcel().getHalfEdgeList().get(twin));
+                	this.getDcel().getHalfEdgeList().get(id).setFace(this.getDcel().getFaceList().get(incidentFace));
+                	this.getDcel().getHalfEdgeList().get(id).setNext(this.getDcel().getHalfEdgeList().get(next));
+                	this.getDcel().getHalfEdgeList().get(id).setPrev(this.getDcel().getHalfEdgeList().get(prev));
                 }
                 
                 while ((line = d.readLine()) != null) {
@@ -465,14 +465,14 @@ public class FindDCEL {
                 	int lng = lineSplit.length;
                 	
                 	if ( outer != -1 ){
-                    	this.dcel.getFaceList().get(id).setOuterComponent(this.dcel.getHalfEdgeList().get(outer));
-                    	this.dcel.getFaceList().get(id).analyseFace();
+                    	this.getDcel().getFaceList().get(id).setOuterComponent(this.getDcel().getHalfEdgeList().get(outer));
+                    	this.getDcel().getFaceList().get(id).analyseFace();
                 	}
                 	
                 	for ( int i=2; i<lng; i++ ){
                 		inner = (int) Float.parseFloat(lineSplit[i]);
                     	if ( inner != -1 ){
-                    		this.dcel.getFaceList().get(id).getInnerComponent().add(this.dcel.getHalfEdgeList().get(inner));
+                    		this.getDcel().getFaceList().get(id).getInnerComponent().add(this.getDcel().getHalfEdgeList().get(inner));
                     	}
                 	}
                 }
@@ -491,5 +491,13 @@ public class FindDCEL {
 		
 		//this.dcel.printDCEL();
 		//colorDCEL();
+	}
+
+	public void setDcel(DCEL dcel) {
+		this.dcel = dcel;
+	}
+
+	public DCEL getDcel() {
+		return dcel;
 	}
 }

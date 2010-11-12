@@ -34,6 +34,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import PointLocation.FindLocation;
+
 import components.DrawArea.CaracForme;
 import components.DrawArea.TypeAction;
 import computation.FindDCEL;
@@ -349,6 +351,9 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	public void findDCEL() {
 		findIntersections();
 		fd = new FindDCEL(getDrawArea().getSceneGraphArea().getSegments(), getDrawArea().getSceneGraphArea().getIntersections(), getDrawArea());
+		FindLocation fl = new FindLocation(fd.getDcel());
+		fl.createSegmentList();
+		
 	}
 	
 	public void colorDCEL(){

@@ -16,13 +16,12 @@ import DCEL.Face;
  *
  */
 public class SegmentLocation {
+	private int id;
 	private Point2D p1;
 	private Point2D p2;
 	private Face upperFace;
 	private Face lowerFace;
-	
-	
-	
+
 	
 	public void setP1(Point2D p1) {
 		this.p1 = p1;
@@ -67,6 +66,12 @@ public class SegmentLocation {
 		}
 		
 		return false;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getId() {
+		return id;
 	}
 	
 	

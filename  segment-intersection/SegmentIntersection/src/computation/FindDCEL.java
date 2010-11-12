@@ -323,6 +323,12 @@ public class FindDCEL {
 		//add the infinite face to the Face List
 		getDcel().addFaceList(f0);
 		
+		//Re-arrange the IDs of the faces
+		for(int j=0; j<nbFaces+1; j++){
+			faceTmp = getDcel().getFaceList().get(j);
+			faceTmp.setId(j);
+		}
+			
 		/*
 		nbHalfEdges = dcel.getHalfEdgeList().size();
 		for(int j=0; j<nbHalfEdges; j++){

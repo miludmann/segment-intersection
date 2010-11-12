@@ -132,12 +132,6 @@ public class DCEL {
 		//Print HalfEdge List
 		System.out.println("\nHALF EDGES");
 		
-		//Re-arrange the IDs of the faces
-		for(int j=0; j<nbFaces; j++){
-			faceTmp = this.getFaceList().get(j);
-			faceTmp.setId(j);
-		}
-		
 		for(int j=0; j<nbHalfEdges; j++){
 			heTmp = this.getHalfEdgeList().get(j);
 			System.out.println("\nid: "+heTmp.getId());
@@ -223,11 +217,7 @@ public class DCEL {
 				//Print HalfEdge List
 				out.write("\nHALF EDGES: (id, origin, twin, incidentFace, next, prev)\n");
 				
-				//Re-arrange the IDs of the faces
-				for(int j=0; j<nbFaces; j++){
-					faceTmp = this.getFaceList().get(j);
-					faceTmp.setId(j);
-				}
+
 				for(int j=0; j<nbHalfEdges; j++){
 					heTmp = this.getHalfEdgeList().get(j);
 					out.write(heTmp.getId() + " ");

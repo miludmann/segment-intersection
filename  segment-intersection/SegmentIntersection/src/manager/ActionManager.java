@@ -34,7 +34,8 @@ public class ActionManager implements ActionListener
 		ACK_DEL,DELETE,
 		DRAW_SEGMENT,
 		REDRAW_ALL, OPEN, FIND_INTER,
-		COLOR_DCEL, FIND_DCEL, SAVE_DCEL, OPEN_DCEL;
+		COLOR_DCEL, FIND_DCEL, SAVE_DCEL, OPEN_DCEL,
+		LOCATE_POINT;
 						
 		/**
 		 * Demande au Gestionnaire d'effectuer une action 
@@ -114,6 +115,10 @@ public class ActionManager implements ActionListener
 			case OPEN_DCEL:
 				am.getZone().openDCEL();
 				return;
+				
+			case LOCATE_POINT:
+				am.getZone().locatePoint();
+				return;
 			
 					
 			} throw new AssertionError("ActionToPerform::unknown assertion : " + this);
@@ -148,6 +153,8 @@ public class ActionManager implements ActionListener
 				return new String("Find intersections");
 			case FIND_DCEL:
 				return new String("Find DCEL");
+			case LOCATE_POINT:
+				return new String("Locate point");
 			
 
 			}

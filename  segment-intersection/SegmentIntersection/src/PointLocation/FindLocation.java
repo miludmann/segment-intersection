@@ -100,6 +100,6 @@ public class FindLocation {
 				}
 			}
 		}
-		//System.out.println("Nb Segments: " + segmentList.size());
+		System.out.println("Nb Segments: " + segmentList.size());
 	}
 }

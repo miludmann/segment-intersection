@@ -354,6 +354,7 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	}
 	
 	public void colorDCEL(){
+		getDrawArea().getSceneGraphArea().removePolygons();
 		if ( fd != null )
 			fd.colorDCEL();
 		return;

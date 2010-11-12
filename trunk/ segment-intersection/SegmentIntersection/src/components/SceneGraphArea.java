@@ -231,8 +231,7 @@ public class SceneGraphArea extends JPanel {
         return intersections;
 	}
 	
-	
-	
+
 	public void removeIntersections(){
 		int nbItems = ((DefaultTreeModel) tree.getModel()).getChildCount(MainWindow.root);
         
@@ -247,5 +246,22 @@ public class SceneGraphArea extends JPanel {
         	j++;
         }
 	}
+	
+	public void removePolygons(){
+		int nbItems = ((DefaultTreeModel) tree.getModel()).getChildCount(MainWindow.root);
+        
+        int i=0, j=0;
+        while(i<nbItems)
+        {
+        	if(((DefaultTreeModel) tree.getModel()).getChild(MainWindow.root, j).getClass() == Polygon.class){
+        		MainWindow.root.remove(j);
+        		j--;
+        	}
+        	i++;
+        	j++;
+        }
+	}
+	
+	
 
 }

@@ -125,7 +125,6 @@ public class FindLocation {
 		nbFaces = dcel.getFaceList().size();
 		
 		for( int i=0; i<(nbFaces-1); i++ ){
-			System.out.println("haha");
 			f = dcel.getFaceList().get(i);
 			h0 = heTmp = f.getOuterComponent();
 			nbcross = 0;
@@ -171,4 +170,13 @@ public class FindLocation {
 			dcel.getDrawArea().redrawAll();
 		}
 	}
+	
+	public static void delay (int n){
+        long t0,t1;
+        t0=System.currentTimeMillis();
+        do{
+            t1=System.currentTimeMillis();
+        }
+        while (t1-t0<1000);
+}
 }

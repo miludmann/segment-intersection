@@ -166,7 +166,7 @@ public class FindLocation {
 		if ( !(fres == null) ){
 			dcel.colorDCEL(fres);
 		}
-		else{
+		{
 			dcel.getDrawArea().redrawAll();
 		}
 	}

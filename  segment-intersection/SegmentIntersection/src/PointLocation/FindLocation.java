@@ -1,9 +1,12 @@
 package PointLocation;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import DCEL.DCEL;
+import DCEL.Face;
 import DCEL.HalfEdge;
+import DCEL.Vertex;
 
 /**
  * <p>
@@ -100,6 +103,72 @@ public class FindLocation {
 				}
 			}
 		}
-		System.out.println("Nb Segments: " + segmentList.size());
+		
+		dcel.getDrawArea().setDcel(dcel);
+		dcel.getDrawArea().setFl(this);
+		
+		//System.out.println("Nb Segments: " + segmentList.size());
+	}
+	
+	
+	public void locateFace(int x, int y) {
+		
+		int nbFaces;
+		Vertex v = new Vertex(new Point2D.Float(x,y), 0);
+		double dist, distTmp, distMes;
+		int nbcross;
+		Face f, fres;
+		HalfEdge h0, heTmp;
+		
+		fres = null;
+		dist = 0;
+		nbFaces = dcel.getFaceList().size();
+		
+		for( int i=0; i<(nbFaces-1); i++ ){
+			System.out.println("haha");
+			f = dcel.getFaceList().get(i);
+			h0 = heTmp = f.getOuterComponent();
+			nbcross = 0;
+			distTmp = 0;
+			
+			do {
+				if ( v.crossHorizontal(heTmp) ){
+					distMes = v.horizontalDistance(heTmp);
+					
+					if ( distMes > 0 ){
+						if ( nbcross == 0){
+							distTmp = distMes;
+						}
+						else{
+							if ( distTmp > distMes )
+								distTmp = distMes;
+						}
+						nbcross++;
+					}
+				}
+			}
+			while( !(heTmp = heTmp.getNext()).equals(h0) );
+			
+			if ( nbcross % 2 == 1 ){
+				if ( fres == null ){
+					fres = f;
+					dist = distTmp;
+				}
+				else{
+					if ( dist > distTmp ){
+						fres = f;
+						dist = distTmp;
+					}
+				}
+			}
+		}
+		
+		dcel.getDrawArea().getSceneGraphArea().removePolygons();
+		if ( !(fres == null) ){
+			dcel.colorDCEL(fres);
+		}
+		else{
+			dcel.getDrawArea().redrawAll();
+		}
 	}
 }

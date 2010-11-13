@@ -45,14 +45,13 @@ public class ToolBar extends JToolBar
     private JButton openDCEL = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/refresh.png")));
     private JButton locatePoint = new JButton(new ImageIcon(OptionsArea.class.getResource("/images/selectionnerTout.png")));
     
-    
-
 
     
     public ToolBar(OptionsArea optionsArea)
     {
         /* Creation de la BarreOutils horizontale */
         super(JToolBar.HORIZONTAL);
+        optionsArea.setTb(this);
         
         segment.addActionListener(new ActionManager(ActionToPerform.DRAW_SEGMENT, optionsArea));
         nouvellePage.addActionListener(new ActionManager(ActionToPerform.NEW_SHEET, optionsArea));
@@ -136,6 +135,10 @@ public class ToolBar extends JToolBar
 	 */
 	public void setMainWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
+	}
+	
+	public JButton getLocateBox(){
+		return locatePoint;
 	}
 	
 }

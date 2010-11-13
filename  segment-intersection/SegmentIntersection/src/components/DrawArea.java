@@ -23,6 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
+import DCEL.DCEL;
+import PointLocation.FindLocation;
+
 
 import sceneGraph.SceneGraphTree;
 
@@ -52,6 +55,9 @@ import sceneGraph.SceneGraphTree;
 public class DrawArea extends JPanel implements MouseListener,
         MouseMotionListener
 {
+	private DCEL dcel;
+	private FindLocation fl;
+	private boolean locateOn;
 	
 	/**
 	 * Caractéristique de la forme
@@ -138,6 +144,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	public DrawArea(StatusBar barreInfo, SceneGraphArea sceneGraphArea)
 	{
 		super(true); // isDoubleBuffered = true;
+		this.setLocateOn(false);
 		
 		polygoneDefaut.add(new int[] {0,0});
 		polygoneDefaut.add(new int[] {200,100});
@@ -270,45 +277,50 @@ public class DrawArea extends JPanel implements MouseListener,
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
-
 		int x = e.getX(), y = e.getY();
 		int[] point = {x, y};
 		
-		mouseMoved = false;
-
-		numButton = e.getButton();
-		if (numButton == MouseEvent.BUTTON1)
-		{
-	    	pointDepart = point;
-
-	    	if (typeDessin == TypeAction.DESSIN)
-			{
-	    		creerForme(e);
-			}				
-	    	else if (typeDessin == TypeAction.SELECTION || e.isControlDown())
-	    	{
-	            SceneGraphTree s = MainWindow.root.getNodeAt(x, y);
-	            
-                if (!e.isControlDown())
-        			setApparenceSelection(currentSkin);
-                    selection.clear();
-                
-	            if (s != null)
-	            {
-	            	if (selection.contains(s))
-	            		selection.remove(s);
-	            	else
-	            		selection.add(s);
-	            }
-	            
-	    	}
-	    	
-				
-			repaint();
+		if ( this.isLocateOn() ){
+			fl.locateFace(x,y);
 		}
-		else
-			redrawAll();
-		
+		else{
+			
+			mouseMoved = false;
+	
+			numButton = e.getButton();
+			if (numButton == MouseEvent.BUTTON1)
+			{
+		    	pointDepart = point;
+	
+		    	if (typeDessin == TypeAction.DESSIN)
+				{
+		    		creerForme(e);
+				}				
+		    	else if (typeDessin == TypeAction.SELECTION || e.isControlDown())
+		    	{
+		            SceneGraphTree s = MainWindow.root.getNodeAt(x, y);
+		            
+	                if (!e.isControlDown())
+	        			setApparenceSelection(currentSkin);
+	                    selection.clear();
+	                
+		            if (s != null)
+		            {
+		            	if (selection.contains(s))
+		            		selection.remove(s);
+		            	else
+		            		selection.add(s);
+		            }
+		            
+		    	}
+		    	
+					
+				repaint();
+			}
+			else{
+				redrawAll();
+			}
+		}
 		maybeShowPopup(e);
 	}
 
@@ -322,6 +334,7 @@ public class DrawArea extends JPanel implements MouseListener,
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
+		
 		if (numButton == MouseEvent.BUTTON1)
 		{
 			if (typeDessin == TypeAction.DESSIN)
@@ -384,7 +397,6 @@ public class DrawArea extends JPanel implements MouseListener,
 
 		currentShape.setSkin(new Skin(1, new Color(color1,color2,color3), new Color(color1, color2, color3)));
         MainWindow.root.addNode(currentShape);
-        
         redrawAll();
         
 	}
@@ -748,5 +760,29 @@ public class DrawArea extends JPanel implements MouseListener,
 	
 	public SceneGraphArea getSceneGraphArea(){
 		return this.sceneGraphArea;
+	}
+
+	public void setDcel(DCEL dcel) {
+		this.dcel = dcel;
+	}
+
+	public DCEL getDcel() {
+		return dcel;
+	}
+
+	public void setLocateOn(boolean locateOn) {
+		this.locateOn = locateOn;
+	}
+
+	public boolean isLocateOn() {
+		return locateOn;
+	}
+
+	public void setFl(FindLocation fl) {
+		this.fl = fl;
+	}
+
+	public FindLocation getFl() {
+		return fl;
 	}
 }

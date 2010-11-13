@@ -6,13 +6,16 @@ package components;
 import manager.ColorManager;
 import manager.ThicknessManager;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Paint;
+import java.awt.Robot;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -73,6 +76,8 @@ public class OptionsArea extends JPanel implements ChangeListener {
     private SpinnerNumberModel nbCotesRouletteModel;
     private JSpinner nbCotesRoulette;
     private FindDCEL fd;
+    private FindLocation fl;
+    private ToolBar tb;
        
 
     /**
@@ -168,6 +173,8 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	 * Pour tout supprimer
 	 */
 	public void deleteAll() {
+		if ( this.getDrawArea().isLocateOn() )
+			locatePoint();
 		drawArea.deleteAll();
 	}
 
@@ -373,10 +380,37 @@ public class OptionsArea extends JPanel implements ChangeListener {
 	}
 	
 	public void locatePoint(){
-		if ( fd != null ){
-			FindLocation fl = new FindLocation(fd.getDcel());
-			fl.createSegmentList();
+		
+		if ( fd != null ){		
+			if (  ! this.getDrawArea().isLocateOn() ){
+				tb.getLocateBox().setIcon(new ImageIcon(OptionsArea.class.getResource("/images/supprimer.png")));
+				this.getDrawArea().setLocateOn(true);
+
+				fl = new FindLocation(fd.getDcel());
+				fl.createSegmentList();
+	
+			}
+			else{
+				tb.getLocateBox().setIcon(new ImageIcon(OptionsArea.class.getResource("/images/selectionnerTout.png")));
+				this.getDrawArea().setLocateOn(false);
+			}
 		}
+	}
+
+	public void setFl(FindLocation fl) {
+		this.fl = fl;
+	}
+
+	public FindLocation getFl() {
+		return fl;
+	}
+
+	public void setTb(ToolBar tb) {
+		this.tb = tb;
+	}
+
+	public ToolBar getTb() {
+		return tb;
 	}
 }
 	

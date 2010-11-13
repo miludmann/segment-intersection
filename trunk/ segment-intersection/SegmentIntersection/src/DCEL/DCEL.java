@@ -345,7 +345,6 @@ public class DCEL {
 			points.add(pointIn);
 		}
 		
-		
 		drawArea.drawPolygon(points);
 		return;
 	}

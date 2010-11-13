@@ -398,7 +398,6 @@ public class DrawArea extends JPanel implements MouseListener,
 		currentShape.setSkin(new Skin(1, new Color(color1,color2,color3), new Color(color1, color2, color3)));
         MainWindow.root.addNode(currentShape);
         redrawAll();
-        
 	}
 
 	

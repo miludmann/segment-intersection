@@ -306,6 +306,7 @@ public class DCEL {
 		HalfEdge h0;
 		ArrayList<HalfEdge> innerComp;
 		ArrayList<int[]> points = new ArrayList<int[]>();
+		
 		h0 = face.getOuterComponent();
 		heTmp = h0;
 
@@ -317,9 +318,12 @@ public class DCEL {
 			heTmp = heTmp.getNext();
 		}
 		while ( !(h0.equals(heTmp)) );
+
+
 		
 		// and from here we "substract" the innerComponents
 		pTmp2 = heTmp.getOrigin().getP();
+
 		innerComp = face.getInnerComponent();
 		
 		for ( int i = 0; i < innerComp.size(); i++ ){

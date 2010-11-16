@@ -262,10 +262,13 @@ public class FindDCEL {
 				if ( v1.crossHorizontal(heTmp) ){
 					distTmp2 = v1.horizontalDistance(heTmp);
 					
-					if ( distTmp == 0 || distTmp2 < distTmp )
-						distTmp = distTmp2;
-					
-					nbEdgesCrossed++;
+					if ( distTmp2 >= 0 )
+					{
+						if ( distTmp == 0 || distTmp2 < distTmp )
+							distTmp = distTmp2;
+						
+						nbEdgesCrossed++;
+					}
 				}
 				heTmp = heTmp.getNext();
 				
@@ -273,10 +276,13 @@ public class FindDCEL {
 					if ( v1.crossHorizontal(heTmp) ){
 						distTmp2 = v1.horizontalDistance(heTmp);
 						
-						if ( distTmp == 0 || distTmp2 < distTmp )
-							distTmp = distTmp2;
-						
-						nbEdgesCrossed++;
+						if ( distTmp2 >= 0 )
+						{
+							if ( distTmp == 0 || distTmp2 < distTmp )
+								distTmp = distTmp2;
+							
+							nbEdgesCrossed++;
+						}
 					}
 					heTmp = heTmp.getNext();
 				}

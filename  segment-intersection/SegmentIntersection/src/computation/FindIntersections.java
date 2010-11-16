@@ -67,7 +67,7 @@ public class FindIntersections {
 		long timerEnd = System.currentTimeMillis();
 		long runningTime = Math.abs(timerEnd - timerStart);
 
-		System.out.println("Running time to find intersections : "+runningTime+" ms");
+		//System.out.println("Running time to find intersections : "+runningTime+" ms");
 		
 	}
 	

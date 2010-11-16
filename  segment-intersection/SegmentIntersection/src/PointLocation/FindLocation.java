@@ -108,6 +108,11 @@ public class FindLocation {
 		dcel.getDrawArea().setFl(this);
 		
 		//System.out.println("Nb Segments: " + segmentList.size());
+		
+		//long timerEnd = System.currentTimeMillis();
+		//long runningTime = Math.abs(timerEnd - timerStart);
+
+		//System.out.println("Running time to find intersections : "+runningTime+" ms");
 	}
 	
 	

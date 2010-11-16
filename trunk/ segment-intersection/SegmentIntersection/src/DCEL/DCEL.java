@@ -318,8 +318,6 @@ public class DCEL {
 			heTmp = heTmp.getNext();
 		}
 		while ( !(h0.equals(heTmp)) );
-
-
 		
 		// and from here we "substract" the innerComponents
 		pTmp2 = heTmp.getOrigin().getP();

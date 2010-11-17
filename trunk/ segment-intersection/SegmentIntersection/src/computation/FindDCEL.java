@@ -158,7 +158,7 @@ public class FindDCEL {
 			
 			he1.setNext(he2);
 			he2.setPrev(he1);
-			
+
 			//System.out.println("RESULT : "+vtmp.getP().toString());
 			//System.out.println(this.dcel.getHalfEdgeList().get(i).getTwin().getOrigin().getId());
 			//System.out.println(tmpHalfEdges.size());
@@ -173,28 +173,28 @@ public class FindDCEL {
 			System.out.println("id:"+heTmp.getId()+"_vertex:"+heTmp.getOrigin().getP().toString()+"_prev:"+heTmp.getPrev().getId()+"_next:"+heTmp.getNext().getId());
 		}
 		*/
-		
+
 		// Face part (rt+lm)
 		ArrayList<HalfEdge> HalfEdgesBis = (ArrayList<HalfEdge>) getDcel().getHalfEdgeList().clone();
 		Face face;
 		
 		while ( HalfEdgesBis.size() > 0 ){
-			
+
 			he1 = HalfEdgesBis.get(0);
 			face = new Face(he1, getDcel().getFaceList().size());
 			getDcel().addFaceList(face);
-			
+
 			he1.setFace(face);
 			HalfEdgesBis.remove(he1);
 			heTmp = he1.getNext();
-			
+
 			while ( !(he1.equals(heTmp)) ){
 				heTmp.setFace(face);
 				HalfEdgesBis.remove(heTmp);
 				heTmp = heTmp.getNext();
 			}
 		}
-		
+
 		// Check Half Edge List with Faces label
 		/*
 		nbHalfEdges = dcel.getHalfEdgeList().size();

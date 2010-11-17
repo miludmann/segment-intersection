@@ -26,6 +26,8 @@ public class FindLocation {
 
 	public FindLocation(DCEL dcel2) {
 		this.dcel = dcel2;
+		dcel.getDrawArea().setDcel(dcel);
+		dcel.getDrawArea().setFl(this);
 	}
 
 	public void setSegmentList(ArrayList<SegmentLocation> segmentList) {
@@ -103,11 +105,9 @@ public class FindLocation {
 				}
 			}
 		}
-		
-		dcel.getDrawArea().setDcel(dcel);
-		dcel.getDrawArea().setFl(this);
-		
-		//System.out.println("Nb Segments: " + segmentList.size());
+
+		//System.out.println("Nb Segments before filtering : " + dcel.getHalfEdgeList().size()/2);
+		//System.out.println("Nb Segments after filtering  : " + segmentList.size());
 		
 		//long timerEnd = System.currentTimeMillis();
 		//long runningTime = Math.abs(timerEnd - timerStart);
@@ -175,13 +175,4 @@ public class FindLocation {
 			dcel.getDrawArea().redrawAll();
 		}
 	}
-	
-	public static void delay (int n){
-        long t0,t1;
-        t0=System.currentTimeMillis();
-        do{
-            t1=System.currentTimeMillis();
-        }
-        while (t1-t0<1000);
-}
 }

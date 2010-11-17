@@ -66,7 +66,7 @@ public class ToolBar extends JToolBar
         openDCEL.addActionListener(new ActionManager(ActionToPerform.OPEN_DCEL, optionsArea));
         locatePoint.addActionListener(new ActionManager(ActionToPerform.LOCATE_POINT, optionsArea));
                
-
+        locatePoint.setEnabled(false);
         
         //segment.setToolTipText("Draw segment");
         nouvellePage.setToolTipText("New sheet");

@@ -109,15 +109,14 @@ public class FindLocation {
 		//System.out.println("Nb Segments before filtering : " + dcel.getHalfEdgeList().size()/2);
 		//System.out.println("Nb Segments after filtering  : " + segmentList.size());
 		
-		//long timerEnd = System.currentTimeMillis();
-		//long runningTime = Math.abs(timerEnd - timerStart);
 
-		//System.out.println("Running time to find intersections : "+runningTime+" ms");
 	}
 	
 	
 	public void locateFace(int x, int y) {
 		
+		long timerStart = System.currentTimeMillis();
+
 		int nbFaces;
 		Vertex v = new Vertex(new Point2D.Float(x,y), 0);
 		double dist, distTmp, distMes;
@@ -174,5 +173,8 @@ public class FindLocation {
 		{
 			dcel.getDrawArea().redrawAll();
 		}
+		long timerEnd = System.currentTimeMillis();
+		long runningTime = Math.abs(timerEnd - timerStart);
+		System.out.println("Running time to find the face : "+runningTime+" ms / seg: " + dcel.getHalfEdgeList().size()/2);
 	}
 }
